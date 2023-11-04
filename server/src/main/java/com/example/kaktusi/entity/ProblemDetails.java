@@ -19,7 +19,7 @@ public class ProblemDetails {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
 
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private Long id;
 
     @Column(nullable = true)
     private String type;

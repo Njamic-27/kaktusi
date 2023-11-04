@@ -14,7 +14,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private UUID id;
+    private Long id;
 
     @Column
     private String username;
