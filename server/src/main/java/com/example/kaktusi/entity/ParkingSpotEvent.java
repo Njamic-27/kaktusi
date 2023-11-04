@@ -1,4 +1,4 @@
-package entity;
+package com.example.kaktusi.entity;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -13,7 +13,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(of = "id", callSuper = false)
 public class ParkingSpotEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

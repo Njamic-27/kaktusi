@@ -1,4 +1,4 @@
-package entity;
+package com.example.kaktusi.entity;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
