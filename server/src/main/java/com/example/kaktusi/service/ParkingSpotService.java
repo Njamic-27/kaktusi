@@ -20,6 +20,9 @@ public class ParkingSpotService {
         this.parkingSpotRepository = parkingSpotRepository;
     }
 
+    public List<ParkingSpotDto> getAllParkingSpotsDatabase() {
+        return parkingSpotRepository.findAll();
+    }
 
     public List<ParkingSpotDto> getAllParkingSpots() {
         HttpHeaders headers = new HttpHeaders();

@@ -12,12 +12,6 @@ import java.util.List;
 public class KaktusiApplication {
 
 	public static void main(String[] args) {
-		try (ConfigurableApplicationContext context = SpringApplication.run(KaktusiApplication.class, args)) {
-			ParkingSpotService parkingSpotService = context.getBean(ParkingSpotService.class);
-			List<ParkingSpotDto> parkingSpots = parkingSpotService.getAllParkingSpots();
-			for (ParkingSpotDto spot : parkingSpots) {
-				System.out.println(spot);
-			}
-		}
+		SpringApplication.run(KaktusiApplication.class, args);
 	}
 }
