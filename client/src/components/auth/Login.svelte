@@ -7,6 +7,7 @@
   import AuthForm from "./AuthForm.svelte";
 
   const dispatch = createEventDispatcher();
+  let error = false;
 
   let inputs = {
     username: {
@@ -34,9 +35,12 @@
     const username = inputs.username.value;
     const password = inputs.password.value;
     try {
-      const user = await authApi.login(username, password );
-      authStore.user.set(user);
-      redirect("Home");
+      const user = await authApi.login(username, password);
+      if (user) {
+        authStore.user.set(user);
+        redirect("Home");
+      }
+      error = !error;
     } catch (err) {
       alert(err.response.data.message);
     }
@@ -45,6 +49,9 @@
 
 <main>
   <div class="main-title">Hackathon</div>
+  {#if error}
+    <div class="error">Failed to log in!</div>
+  {/if}
   <AuthForm
     on:submit={submit}
     on:swap={swap}
@@ -54,6 +61,7 @@
     callToActionLabel="Don't have an account?"
     actionlabel="Click here to register!"
   />
+
   <div class="image-home">
     <img
       src="https://lubricants.goma.hr/wp-content/uploads/sites/3/2023/03/zagreb-1024x288.png"
@@ -68,6 +76,15 @@
   main {
     position: relative;
     overflow-y: hidden;
+  }
+
+  .error {
+    color: red;
+    position: absolute;
+    top: 75%;
+    width: 100%;
+    height: 100%;
+    text-align: center;
   }
 
   .image-home {

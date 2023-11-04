@@ -22,21 +22,22 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public  String register(@Param("username") String username, @Param("password") String password) {
+    public User register(@RequestBody Map<String, String> requestBody) {
+        String username = requestBody.get("username");
+        String password = requestBody.get("password");
         System.out.println("register request: " + username + " " + password);
         User registeredUser =  userService.registerUser(username, password);
-        return registeredUser == null ? "error" : "redirect:/login";
+        return registeredUser == null ? null : registeredUser;
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Map<String, String> requestBody) {
-        System.out.println("Login request");
+    public User login(@RequestBody Map<String, String> requestBody) {
         String username = requestBody.get("username");
         String password = requestBody.get("password");
 
         System.out.println("login request: " + username + " " + password);
         User loggedUser = userService.loginUser(username, password);
-        return loggedUser == null ? "error" : username;
+        return loggedUser == null ? null : loggedUser;
     }
 
 }

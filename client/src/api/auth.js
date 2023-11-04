@@ -14,17 +14,19 @@ const urls = {
   },
 };
 
-const login = (username, password) => {
-  console.log("Sending request");
-  const result = request
+const login = async (username, password) => {
+  const result = await request
     .post(urls.login, { username, password })
     .then(extractData);
-  console.log(result);
   return result;
 };
 
-const register = (user) => {
-  return request.post(urls.register, user).then(extractData);
+const register = (username, password) => {
+  const result = request
+    .post(urls.register, { username, password })
+    .then(extractData);
+  console.log(result);
+  return result;
 };
 
 const logout = () => {

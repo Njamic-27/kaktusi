@@ -34,9 +34,11 @@
     const username = inputs.username.value;
     const password = inputs.password.value;
     try {
-      const user = await authApi.register({ username, password });
-      authStore.user.set(user);
-      redirect("Home");
+      const user = await authApi.register(username, password);
+      if (user) {
+        authStore.user.set(user);
+        redirect("Home");
+      }
     } catch (err) {
       alert(err.response.data.message);
     }

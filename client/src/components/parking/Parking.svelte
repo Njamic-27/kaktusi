@@ -1,7 +1,9 @@
 <script>
   import { SEE_OTHER } from "http-status-codes";
   import ParkingMap from "./ParkingMap.svelte";
-  let selectedSpot = null;
+  import SelectedParking from "./SelectedParking.svelte";
+  $: selectedSpot = null;
+  $: displaySelected = false;
   let spots = [];
   let spot1 = {
     id: "986d1c84-7b38-45f1-b117-08dbdb851562",
@@ -23,16 +25,22 @@
   spots.push(spot2);
 
   function handleParkingSelect({ detail: data }) {
-    selectedSpot = data;
-    if(selectedSpot){
-      
+    if (selectedSpot) {
+      selectedSpot = null;
+      displaySelected = false;
     }
-    console.log(data);
+    selectedSpot = data;
+    displaySelected = true;
   }
 </script>
 
 <main>
   <ParkingMap {spots} on:parkingSelect={handleParkingSelect} />
+  {#if selectedSpot !== null}
+    {#key selectedSpot}
+      <SelectedParking spot={selectedSpot} />
+    {/key}
+  {/if}
 </main>
 
 <style>

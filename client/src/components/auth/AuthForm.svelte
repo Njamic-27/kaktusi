@@ -1,7 +1,7 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-  import StepButton from '@/components/common/Button.svelte';
-  import StepInput from '@/components/common/Input.svelte';
+  import { createEventDispatcher } from "svelte";
+  import StepButton from "@/components/common/Button.svelte";
+  import StepInput from "@/components/common/Input.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -10,15 +10,22 @@
   export let buttonLabel;
   export let callToActionLabel;
   export let actionlabel;
+
 </script>
 
 <section>
   <div class="wrapper">
     <h1>{headerLabel}</h1>
-    <form on:submit|preventDefault={() => dispatch('submit')}>
+    <form on:submit|preventDefault={() => dispatch("submit")}>
       {#each Object.entries(inputs) as [_, { value, type, valid, label, validators }]}
         <div class="input">
-          <StepInput bind:value on:valid={({ detail }) => (valid = detail.valid)} {label} {validators} {type} />
+          <StepInput
+            bind:value
+            on:valid={({ detail }) => (valid = detail.valid)}
+            {label}
+            {validators}
+            {type}
+          />
         </div>
       {/each}
 
@@ -27,7 +34,9 @@
       </div>
       <p>
         {callToActionLabel}
-        <StepButton on:click={() => dispatch('swap')} inline>{actionlabel}</StepButton>
+        <StepButton on:click={() => dispatch("swap")} inline
+          >{actionlabel}</StepButton
+        >
       </p>
     </form>
   </div>
