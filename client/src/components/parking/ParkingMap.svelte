@@ -35,7 +35,7 @@
 
   const dispatch = createEventDispatcher();
   let selectedMarker = null;
-  let minZoomToShowSpots = 16; // Adjust this zoom level as needed
+  let minZoomToShowSpots = 17; // Adjust this zoom level as needed
 
   const latitude = 45.815;
   const longitude = 15.9819;

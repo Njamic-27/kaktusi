@@ -7,6 +7,7 @@
   console.log(spot);
   let address = "";
   let displayCard = false;
+  let price = 0;
 
   // Latitude and Longitude of the location you want to reverse geocode
   const lat = spot.latitude; // Example latitude
@@ -17,7 +18,7 @@
 
   onMount(async () => {
     const id = spot.id;
-    const price = await parkingApi.fetchPrice(id);
+    price = await parkingApi.fetchPrice(id);
     console.log(price);
     // Make a request to the Nominatim API
     fetch(nominatimUrl)
