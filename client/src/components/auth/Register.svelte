@@ -1,21 +1,31 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-  import { authApi } from '@/api';
-  import { authStore } from '@/stores';
-  import { redirect } from '@/utils/router/routing';
-  import { requiredValidator } from '@/utils/validation/validators';
-  import AuthForm from './AuthForm.svelte';
+  import { createEventDispatcher } from "svelte";
+  import { authApi } from "@/api";
+  import { authStore } from "@/stores";
+  import { redirect } from "@/utils/router/routing";
+  import { requiredValidator } from "@/utils/validation/validators";
+  import AuthForm from "./AuthForm.svelte";
 
   const dispatch = createEventDispatcher();
 
   let inputs = {
-    username: { value: '', type: 'text', valid: false, label: 'Username', validators: [requiredValidator()] },
-    password: { value: '', type: 'password', valid: false, label: 'Password', validators: [requiredValidator()] },
-    firstName: { value: '', type: 'text', label: 'First name' },
-    lastName: { value: '', type: 'text', label: 'Last name' },
+    username: {
+      value: "",
+      type: "text",
+      valid: false,
+      label: "Username",
+      validators: [requiredValidator()],
+    },
+    password: {
+      value: "",
+      type: "password",
+      valid: false,
+      label: "Password",
+      validators: [requiredValidator()],
+    },
   };
 
-  const swap = () => dispatch('swap');
+  const swap = () => dispatch("swap");
 
   const submit = async () => {
     const isFormValid = inputs.username.valid && inputs.password.valid;
@@ -23,12 +33,10 @@
 
     const username = inputs.username.value;
     const password = inputs.password.value;
-    const firstName = inputs.firstName.value;
-    const lastName = inputs.lastName.value;
     try {
-      const user = await authApi.register({ username, password, firstName, lastName });
+      const user = await authApi.register({ username, password });
       authStore.user.set(user);
-      redirect('Home');
+      redirect("Home");
     } catch (err) {
       alert(err.response.data.message);
     }
@@ -47,7 +55,10 @@
     actionlabel="Click here to login!"
   />
   <div class="image-home">
-    <img src="https://lubricants.goma.hr/wp-content/uploads/sites/3/2023/03/zagreb-1024x288.png" alt="ZagrebPanorama" />
+    <img
+      src="https://lubricants.goma.hr/wp-content/uploads/sites/3/2023/03/zagreb-1024x288.png"
+      alt="ZagrebPanorama"
+    />
   </div>
 </main>
 
@@ -71,7 +82,7 @@
 
   .main-title {
     font-size: 3rem;
-    font-family: 'Dancing Script', cursive;
+    font-family: "Dancing Script", cursive;
     font-weight: 800;
     width: 100%;
     text-align: center;

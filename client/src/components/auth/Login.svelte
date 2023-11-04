@@ -34,7 +34,7 @@
     const username = inputs.username.value;
     const password = inputs.password.value;
     try {
-      const user = await authApi.login({ username, password });
+      const user = await authApi.login(username, password );
       authStore.user.set(user);
       redirect("Home");
     } catch (err) {
