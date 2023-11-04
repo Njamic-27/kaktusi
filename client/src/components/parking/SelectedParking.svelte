@@ -78,7 +78,7 @@
       </div>
       <div class="price-container">
         <span class="price-label">Price:</span>
-        <span class="highlighted-price">$10.99</span>
+        <span class="highlighted-price">10$ in Zone {spot.parkingSpotZone.slice(-1)}</span>
       </div>
       <button class="reserve-button">Reserve Now</button>
     </div>
@@ -101,11 +101,12 @@
     position: relative;
     z-index: 1;
     height: 300px; /* Set the desired fixed height */
-    width: 100%;
+    width: 80%;
     background-color: var(--color-white);
     border-top: 5px solid var(--color-primary);
-    border-left: 2px solid var(--color-primary);
-    border-right: 2px solid var(--color-primary);
+    border-left: 5px solid var(--color-primary);
+    border-right: 5px solid var(--color-primary);
+    border-bottom: 5px solid var(--color-primary);
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
     display: flex;
