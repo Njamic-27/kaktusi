@@ -112,4 +112,10 @@ public class ParkingSpotService {
         }
         return null;
     }
+
+    public void updateParkingSpot(String id, String type) {
+        ParkingSpotDto parkingSpot = parkingSpotRepository.findById(id).orElseThrow();
+        parkingSpot.setParkingSpotType(ParkingSpotType.valueOf(type));
+        parkingSpotRepository.save(parkingSpot);
+    }
 }
