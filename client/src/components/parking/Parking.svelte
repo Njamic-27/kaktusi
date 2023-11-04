@@ -1,10 +1,8 @@
 <script>
-  import { SEE_OTHER } from "http-status-codes";
   import ParkingMap from "./ParkingMap.svelte";
   import SelectedParking from "./SelectedParking.svelte";
   import { parkingApi } from "@/api";
   import { onMount } from "svelte";
-  import { slide } from "svelte/transition";
   $: selectedSpot = null;
   $: displaySelected = false;
   let spots = [];
@@ -25,12 +23,21 @@
     selectedSpot = data;
     displaySelected = true;
   }
+
+  async function refreshData() {
+    loaded = false;
+    spots = await parkingApi.fetchAll();
+    if (spots.length > 0) {
+      loaded = true;
+    }
+  }
 </script>
 
 <main>
   {#if !loaded}
     <div class="">Loading</div>
   {:else}
+    <button class="refreshButton" on:click={refreshData}>Refresh</button>
     <ParkingMap {spots} on:parkingSelect={handleParkingSelect} />
     {#if selectedSpot !== null}
       {#key selectedSpot}
@@ -50,5 +57,12 @@
     height: 85vh;
     margin-top: 7.5vh;
     width: 100vw;
+  }
+
+  .refreshButton {
+    position: absolute;
+    z-index: 2;
+    top: 5px;
+    right: 5px;
   }
 </style>
