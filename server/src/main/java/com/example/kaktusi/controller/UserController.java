@@ -4,12 +4,10 @@ import com.example.kaktusi.entity.User;
 import com.example.kaktusi.repository.UserRepository;
 import com.example.kaktusi.service.UserService;
 import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("/api/users")
+@RestController()
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
 
