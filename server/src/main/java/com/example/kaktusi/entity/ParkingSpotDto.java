@@ -18,14 +18,16 @@ public class ParkingSpotDto {
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
-
+    @Column
     private Double latitude;
-
+    @Column
     private Double longitude;
-
+    @Column
     private ParkingSpotZone parkingSpotZone;
-
+    @Column
     private boolean occupied;
-
+    @Column
     private LocalDateTime occupiedTimestamp;
+    @Column
+    private ParkingSpotType parkingSpotType;
 }

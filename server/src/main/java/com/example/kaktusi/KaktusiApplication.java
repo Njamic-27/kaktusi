@@ -13,5 +13,6 @@ public class KaktusiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(KaktusiApplication.class, args);
+
 	}
 }

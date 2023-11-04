@@ -1,8 +1,12 @@
 package com.example.kaktusi.service;
 
 import com.example.kaktusi.entity.ParkingSpotDto;
+import com.example.kaktusi.entity.ParkingSpotType;
+import com.example.kaktusi.entity.ParkingSpotZone;
 import com.example.kaktusi.repository.ParkingSpotRepository;
+import jakarta.persistence.GeneratedValue;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -46,6 +50,14 @@ public class ParkingSpotService {
             if (parkingSpots != null) {
                 parkingSpotRepository.deleteAll();
                 for (ParkingSpotDto spot : parkingSpots) {
+                    Double random = Math.random();
+                    if(random <= 0.1) {
+                        spot.setParkingSpotType(ParkingSpotType.HANDICAP);
+                    } else if (random <= 0.15) {
+                        spot.setParkingSpotType(ParkingSpotType.ELECTRIC);
+                    } else {
+                        spot.setParkingSpotType(ParkingSpotType.NORMAL);
+                    }
                     parkingSpotRepository.save(spot);
                 }
 
@@ -58,4 +70,16 @@ public class ParkingSpotService {
         return Collections.emptyList();
     }
 
+    public void deleteParkingSpot(String id) {
+        parkingSpotRepository.deleteById(id);
+    }
+
+    public void addParkingSpot(Double latitude, Double longitude, ParkingSpotZone parkingSpotZone, ParkingSpotType parkingSpotType) {
+        ParkingSpotDto parkingSpotDto = new ParkingSpotDto();
+        parkingSpotDto.setLatitude(latitude);
+        parkingSpotDto.setLongitude(longitude);
+        parkingSpotDto.setParkingSpotZone(parkingSpotZone);
+        parkingSpotDto.setParkingSpotType(parkingSpotType);
+        parkingSpotRepository.save(parkingSpotDto);
+    }
 }
