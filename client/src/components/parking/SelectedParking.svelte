@@ -1,6 +1,7 @@
 <script>
   import { fade, fly, scale, slide } from "svelte/transition";
   import { onMount } from "svelte";
+  import { parkingApi } from "@/api";
 
   export let spot;
   console.log(spot);
@@ -14,7 +15,10 @@
   // Create a Nominatim API request URL
   const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
 
-  onMount(() => {
+  onMount(async () => {
+    const id = spot.id;
+    const price = await parkingApi.fetchPrice(id);
+    console.log(price);
     // Make a request to the Nominatim API
     fetch(nominatimUrl)
       .then((response) => response.json())

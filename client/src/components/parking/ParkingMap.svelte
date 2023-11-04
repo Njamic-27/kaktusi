@@ -1,7 +1,8 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte";
-  import L, { marker } from "leaflet";
+  import L from "leaflet";
   import "leaflet/dist/leaflet.css";
+
   export let spots;
 
   // Define marker icons with different colors
@@ -34,13 +35,26 @@
 
   const dispatch = createEventDispatcher();
   let selectedMarker = null;
+  let minZoomToShowSpots = 16; // Adjust this zoom level as needed
 
   const latitude = 45.815;
   const longitude = 15.9819;
   const zoomLevel = 13;
 
-  onMount(async () => {
+  function updateSpotVisibility(map) {
+    const currentZoom = map.getZoom();
+    spots.forEach((spot) => {
+      if (currentZoom >= minZoomToShowSpots) {
+        // Show the spot marker
+        spot.markerData.addTo(map);
+      } else {
+        // Hide the spot marker
+        map.removeLayer(spot.markerData);
+      }
+    });
+  }
 
+  onMount(async () => {
     const map = L.map("map").setView([latitude, longitude], zoomLevel);
 
     L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
@@ -48,19 +62,21 @@
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>',
     }).addTo(map);
+
     spots.forEach((spot) => {
       let customIcon = spot.occupied ? redIcon : greenIcon;
-      let markerData = L.marker([spot.latitude, spot.longitude], {
+      spot.markerData = L.marker([spot.latitude, spot.longitude], {
         icon: customIcon,
-      }).addTo(map);
-      markerData.on("click", () => {
-        // Change the icon to green when clicked
-        markerData.setIcon(defaultIcon);
-        markerData._icon.style.width = "40px";
-        markerData._icon.style.height = "51px";
-        markerData._icon.style.transition = "all 0.1s";
+      });
 
-        if (selectedMarker && selectedMarker !== markerData) {
+      spot.markerData.on("click", () => {
+        // Change the icon to green when clicked
+        spot.markerData.setIcon(defaultIcon);
+        spot.markerData._icon.style.width = "40px";
+        spot.markerData._icon.style.height = "51px";
+        spot.markerData._icon.style.transition = "all 0.1s";
+
+        if (selectedMarker && selectedMarker !== spot.markerData) {
           // Reset the icon of the previously selected marker to blue
           selectedMarker.setIcon(customIcon);
         }
@@ -71,20 +87,33 @@
         });
 
         map.setView([spot.latitude - 0.0002, spot.longitude], 20);
-        selectedMarker = markerData;
+        selectedMarker = spot.markerData;
         dispatch("parkingSelect", spot);
       });
     });
+
+    map.on("zoomend", () => {
+      updateSpotVisibility(map);
+    });
+
+    // Initialize spot visibility
+    updateSpotVisibility(map);
   });
 </script>
 
-<div id="map" />
+<main>
+  <div id="map" style="height: 100vh; width: 100vw;" />
+</main>
 
 <style>
-  #map {
-    position: relative;
-    z-index: 0;
-    height: 100%;
+  main {
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
     width: 100%;
+    height: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
   }
 </style>
