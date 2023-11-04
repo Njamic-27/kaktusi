@@ -5,7 +5,7 @@ import { logout } from "@/stores/auth";
 const { FORBIDDEN } = StatusCodes;
 
 const config = {
-  baseURL: "http://localhost:8080/api", // Update the base URL
+  baseURL: "http://localhost:8080/api",
   headers: { "Content-Type": "application/json" },
 };
 

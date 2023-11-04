@@ -12,13 +12,13 @@ export const isLoggedIn = () => {
 };
 
 export const isAdmin = () => {
-  let val;
+  /*let val;
   user.subscribe(value => (val = value));
-  return val && val.role.name === 'admin';
+  return val && val.role.name === 'admin';*/
 };
 
 export const logout = async () => {
-  await authApi.logout();
+  //await authApi.logout();
   user.set(null);
   redirect('Auth');
 };

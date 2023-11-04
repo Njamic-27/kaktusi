@@ -5,8 +5,12 @@ import com.example.kaktusi.repository.UserRepository;
 import com.example.kaktusi.service.UserService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import java.util.Map;
 
 @RestController()
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
@@ -25,7 +29,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@Param("username") String username, @Param("password") String password) {
+    public String login(@RequestBody Map<String, String> requestBody) {
+        System.out.println("Login request");
+        String username = requestBody.get("username");
+        String password = requestBody.get("password");
+
         System.out.println("login request: " + username + " " + password);
         User loggedUser = userService.loginUser(username, password);
         return loggedUser == null ? "error" : username;

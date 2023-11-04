@@ -14,8 +14,13 @@ const urls = {
   },
 };
 
-const login = (credentials) => {
-  return request.post(urls.login, credentials).then(extractData);
+const login = (username, password) => {
+  console.log("Sending request");
+  const result = request
+    .post(urls.login, { username, password })
+    .then(extractData);
+  console.log(result);
+  return result;
 };
 
 const register = (user) => {
