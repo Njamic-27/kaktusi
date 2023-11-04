@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 public class ParkingSpotDto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
 
     private Double latitude;
 
