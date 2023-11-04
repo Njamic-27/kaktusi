@@ -1,13 +1,42 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte";
-  import L from "leaflet";
+  import L, { marker } from "leaflet";
   import "leaflet/dist/leaflet.css";
   export let spots;
 
-  const dispatch = createEventDispatcher();
+  // Define marker icons with different colors
+  const redIcon = L.icon({
+    iconUrl: "./src/public/markers/red_marker.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowUrl: "./node_modules/leaflet/dist/images/marker-shadow.png",
+    shadowSize: [41, 41],
+  });
 
-  const latitude = 45.815; // Zagreb's latitude
-  const longitude = 15.9819; // Zagreb's longitude
+  const greenIcon = L.icon({
+    iconUrl: "./src/public/markers/green_marker.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowUrl: "./node_modules/leaflet/dist/images/marker-shadow.png",
+    shadowSize: [41, 41],
+  });
+
+  const defaultIcon = L.icon({
+    iconUrl: "./node_modules/leaflet/dist/images/marker-icon.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowUrl: "./node_modules/leaflet/dist/images/marker-shadow.png",
+    shadowSize: [41, 41],
+  });
+
+  const dispatch = createEventDispatcher();
+  let selectedMarker = null;
+
+  const latitude = 45.815;
+  const longitude = 15.9819;
   const zoomLevel = 13;
 
   onMount(() => {
@@ -19,20 +48,34 @@
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>',
     }).addTo(map);
     spots.forEach((spot) => {
-      let markerData = L.marker([spot.latitude, spot.longitude]).addTo(map);
+      let customIcon = spot.occupied ? redIcon : greenIcon;
+      let markerData = L.marker([spot.latitude, spot.longitude], {
+        icon: customIcon,
+      }).addTo(map);
       markerData.on("click", () => {
+        // Change the icon to green when clicked
+        markerData.setIcon(defaultIcon);
+
+        if (selectedMarker && selectedMarker !== markerData) {
+          // Reset the icon of the previously selected marker to blue
+          selectedMarker.setIcon(customIcon);
+        }
+
+        map.setView([spot.latitude, spot.longitude], 20);
+        selectedMarker = markerData;
         dispatch("parkingSelect", spot);
       });
     });
   });
-  // Hide the attribution control
 </script>
 
 <div id="map" />
 
 <style>
   #map {
-    height: 100%; /* Adjust the height as needed for mobile display */
+    position: relative;
+    z-index: 0;
+    height: 100%;
     width: 100%;
   }
 </style>

@@ -2,27 +2,20 @@
   import { SEE_OTHER } from "http-status-codes";
   import ParkingMap from "./ParkingMap.svelte";
   import SelectedParking from "./SelectedParking.svelte";
+  import { parkingApi } from "@/api";
+  import { onMount } from "svelte";
+  import { slide } from "svelte/transition";
   $: selectedSpot = null;
   $: displaySelected = false;
   let spots = [];
-  let spot1 = {
-    id: "986d1c84-7b38-45f1-b117-08dbdb851562",
-    latitude: 45.80528,
-    longitude: 15.96649,
-    parkingSpotZone: "Zone1",
-    occupied: true,
-    occupiedTimestamp: "2023-11-04T12:46:06.7265298",
-  };
-  let spot2 = {
-    id: "2b6f2fdc-f466-4065-b118-08dbdb851562",
-    latitude: 45.80527,
-    longitude: 15.96668,
-    parkingSpotZone: "Zone1",
-    occupied: true,
-    occupiedTimestamp: "2023-11-04T12:46:43.7265407",
-  };
-  spots.push(spot1);
-  spots.push(spot2);
+  let loaded = false;
+
+  onMount(async () => {
+    spots = await parkingApi.fetchAll();
+    if (spots.length > 0) {
+      loaded = true;
+    }
+  });
 
   function handleParkingSelect({ detail: data }) {
     if (selectedSpot) {
@@ -35,20 +28,27 @@
 </script>
 
 <main>
-  <ParkingMap {spots} on:parkingSelect={handleParkingSelect} />
-  {#if selectedSpot !== null}
-    {#key selectedSpot}
-      <SelectedParking spot={selectedSpot} />
-    {/key}
+  {#if !loaded}
+    <div class="">Loading</div>
+  {:else}
+    <ParkingMap {spots} on:parkingSelect={handleParkingSelect} />
+    {#if selectedSpot !== null}
+      {#key selectedSpot}
+        <SelectedParking spot={selectedSpot} />
+      {/key}
+    {/if}
   {/if}
 </main>
 
 <style>
   main {
-    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
     z-index: 0;
-    height: 84vh;
-    margin-top: 8vh;
+    height: 85vh;
+    margin-top: 7.5vh;
     width: 100vw;
   }
 </style>
