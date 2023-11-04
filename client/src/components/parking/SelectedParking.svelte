@@ -4,7 +4,6 @@
   import { parkingApi } from "@/api";
 
   export let spot;
-  console.log(spot);
   let address = "";
   let displayCard = false;
   let price = 0;
@@ -15,11 +14,10 @@
 
   // Create a Nominatim API request URL
   const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
-
   onMount(async () => {
     const id = spot.id;
     price = await parkingApi.fetchPrice(id);
-    console.log(price);
+
     // Make a request to the Nominatim API
     fetch(nominatimUrl)
       .then((response) => response.json())
@@ -33,6 +31,11 @@
         console.error("Error:", error);
       });
   });
+
+  function navigate() {
+    const url = `https://www.google.com/maps?q=${lat},${lng}`;
+    window.location.href = url;
+  }
 </script>
 
 <main>
@@ -87,7 +90,10 @@
           >10$ in Zone {spot.parkingSpotZone.slice(-1)}</span
         >
       </div>
-      <button class="reserve-button">Reserve Now</button>
+      {#if !spot.occupied}
+        <button class="button">Reserve Now</button>
+      {/if}
+      <button class="button" on:click={navigate}>Navigate</button>
     </div>
   {/if}
 </main>
@@ -104,11 +110,22 @@
     align-items: flex-end;
   }
 
+  .button{
+    border: 2px solid var(--color-primary);
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px;
+    font-family: 'Poppins';
+    font-size: large;
+    background-color: var(--color-accent);
+    color: white;
+  }
+
   .cardContainer {
     position: relative;
     z-index: 1;
     height: 300px; /* Set the desired fixed height */
-    width: 80%;
+    width: 90%;
     background-color: var(--color-white);
     border-top: 5px solid var(--color-primary);
     border-left: 5px solid var(--color-primary);

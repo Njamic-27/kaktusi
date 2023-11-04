@@ -37,7 +37,7 @@
   {#if !loaded}
     <div class="">Loading</div>
   {:else}
-    <button class="refreshButton" on:click={refreshData}>Refresh</button>
+    <button class="button" on:click={refreshData}>Refresh</button>
     <ParkingMap {spots} on:parkingSelect={handleParkingSelect} />
     {#if selectedSpot !== null}
       {#key selectedSpot}
@@ -59,10 +59,18 @@
     width: 100vw;
   }
 
-  .refreshButton {
+  .button {
     position: absolute;
-    z-index: 2;
     top: 5px;
     right: 5px;
+    z-index: 2;
+    border: 3px solid var(--color-primary);
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px;
+    font-family: "Poppins";
+    font-size: large;
+    background-color: var(--color-accent);
+    color: white;
   }
 </style>

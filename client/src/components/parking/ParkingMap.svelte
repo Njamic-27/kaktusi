@@ -24,7 +24,7 @@
     shadowSize: [41, 41],
   });
 
-  const defaultIcon = L.icon({
+  const blueIcon = L.icon({
     iconUrl: "./src/public/markers/blue_marker.png",
     iconSize: [30, 41],
     iconAnchor: [12, 41],
@@ -66,28 +66,31 @@
     spots.forEach((spot) => {
       let customIcon = spot.occupied ? redIcon : greenIcon;
       spot.markerData = L.marker([spot.latitude, spot.longitude], {
-        icon: customIcon,
+        icon: spot.occupied ? redIcon : greenIcon,
       });
 
       spot.markerData.on("click", () => {
-        // Change the icon to green when clicked
-        spot.markerData.setIcon(defaultIcon);
+        // Change the icon to blue when clicked
+        spot.markerData.setIcon(blueIcon);
         spot.markerData._icon.style.width = "40px";
         spot.markerData._icon.style.height = "51px";
         spot.markerData._icon.style.transition = "all 0.1s";
 
-        if (selectedMarker && selectedMarker !== spot.markerData) {
-          // Reset the icon of the previously selected marker to blue
-          selectedMarker.setIcon(customIcon);
+        if (selectedMarker && selectedMarker !== spot) {
+          // Reset the icon of the previously selected marker to corresponding color
+          customIcon = selectedMarker.occupied ? redIcon : greenIcon;
+          selectedMarker.markerData.setIcon(customIcon);
         }
 
         map.on("click", () => {
-          selectedMarker.setIcon(customIcon);
+          selectedMarker.markerData.setIcon(
+            selectedMarker.occupied ? redIcon : greenIcon
+          );
           dispatch("parkingSelect", null);
         });
 
         map.setView([spot.latitude - 0.0002, spot.longitude], 20);
-        selectedMarker = spot.markerData;
+        selectedMarker = spot;
         dispatch("parkingSelect", spot);
       });
     });
