@@ -38,4 +38,9 @@ public class ParkingSpotController{
     public List<ParkingSpotDto> getAllParkingSpots() {
         return parkingSpotService.getAllParkingSpotsDatabase();
     }
+
+    @GetMapping("/price/{id}")
+    public Double getPrice(@PathVariable("id") String id) {
+        return parkingSpotService.getPrice(id);
+    }
 }

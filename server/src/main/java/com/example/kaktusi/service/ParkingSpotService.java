@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -81,5 +82,34 @@ public class ParkingSpotService {
         parkingSpotDto.setParkingSpotZone(parkingSpotZone);
         parkingSpotDto.setParkingSpotType(parkingSpotType);
         parkingSpotRepository.save(parkingSpotDto);
+    }
+
+    public Double getFilledPercentage() {
+        int occupiedSpots = parkingSpotRepository.getOccupiedNumber().orElse(0);
+        int totalSpots = parkingSpotRepository.findAll().size();
+        return (double) occupiedSpots / totalSpots;
+    }
+    public Double getPrice(String id) {
+        ParkingSpotDto parkingSpot = parkingSpotRepository.findById(id).orElseThrow();
+        double filledPercentage = getFilledPercentage();
+        double multiplier = 1.0;
+        if (filledPercentage >= 0.9) {
+            multiplier =  2.0;
+        } else if (filledPercentage >= 0.8) {
+            multiplier = 1.5;
+        } else if (filledPercentage <=0.2) {
+            multiplier = 0.8;
+        }
+        switch (parkingSpot.getParkingSpotZone()) {
+            case Zone1:
+                return 1.6 * multiplier;
+            case Zone2:
+                return 0.7 * multiplier;
+            case Zone3:
+                return 0.3 * multiplier;
+            case Zone4:
+                return 1.3 *  multiplier;
+        }
+        return null;
     }
 }
