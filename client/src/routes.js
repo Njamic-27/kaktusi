@@ -32,9 +32,9 @@ const beforeRoute = () => {
     return redirect("Home");
   }
 
-  //if (!isLoggedIn() && !isAuthRoute()) {
-  //  return redirect("Auth");
-  //}
+  if (!isLoggedIn() && !isAuthRoute()) {
+    return redirect("Auth");
+  }
 
   if (isLoggedIn() && isAuthRoute()) {
     return redirect("Home");

@@ -7,7 +7,7 @@
   // Define marker icons with different colors
   const redIcon = L.icon({
     iconUrl: "./src/public/markers/red_marker.png",
-    iconSize: [25, 41],
+    iconSize: [30, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowUrl: "./node_modules/leaflet/dist/images/marker-shadow.png",
@@ -16,7 +16,7 @@
 
   const greenIcon = L.icon({
     iconUrl: "./src/public/markers/green_marker.png",
-    iconSize: [25, 41],
+    iconSize: [30, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowUrl: "./node_modules/leaflet/dist/images/marker-shadow.png",
@@ -24,8 +24,8 @@
   });
 
   const defaultIcon = L.icon({
-    iconUrl: "./node_modules/leaflet/dist/images/marker-icon.png",
-    iconSize: [25, 41],
+    iconUrl: "./src/public/markers/blue_marker.png",
+    iconSize: [30, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowUrl: "./node_modules/leaflet/dist/images/marker-shadow.png",
@@ -39,7 +39,8 @@
   const longitude = 15.9819;
   const zoomLevel = 13;
 
-  onMount(() => {
+  onMount(async () => {
+
     const map = L.map("map").setView([latitude, longitude], zoomLevel);
 
     L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
@@ -55,13 +56,21 @@
       markerData.on("click", () => {
         // Change the icon to green when clicked
         markerData.setIcon(defaultIcon);
+        markerData._icon.style.width = "40px";
+        markerData._icon.style.height = "51px";
+        markerData._icon.style.transition = "all 0.1s";
 
         if (selectedMarker && selectedMarker !== markerData) {
           // Reset the icon of the previously selected marker to blue
           selectedMarker.setIcon(customIcon);
         }
 
-        map.setView([spot.latitude, spot.longitude], 20);
+        map.on("click", () => {
+          selectedMarker.setIcon(customIcon);
+          dispatch("parkingSelect", null);
+        });
+
+        map.setView([spot.latitude - 0.0002, spot.longitude], 20);
         selectedMarker = markerData;
         dispatch("parkingSelect", spot);
       });

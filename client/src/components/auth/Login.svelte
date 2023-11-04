@@ -39,8 +39,9 @@
       if (user) {
         authStore.user.set(user);
         redirect("Home");
+      } else {
+        error = !error;
       }
-      error = !error;
     } catch (err) {
       alert(err.response.data.message);
     }

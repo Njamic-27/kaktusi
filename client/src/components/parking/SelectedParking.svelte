@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
 
   export let spot;
+  console.log(spot);
   let address = "";
   let displayCard = false;
 
@@ -31,7 +32,56 @@
 
 <main>
   {#if displayCard}
-    <div class="cardContainer" in:slide={{ delay: 200 }} out:slide />
+    <div class="cardContainer" in:slide={{ delay: 200 }} out:slide>
+      <h3 class="spot-title">{address}</h3>
+      <p class="parking-type">Parking type: {spot.parkingSpotType}</p>
+      <div class="time-container">
+        <span class="time-label">End Time:</span>
+        <div class="time-select">
+          <select class="hour-select input-field">
+            <option value="00">00</option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            <option value="05">05</option>
+            <option value="06">06</option>
+            <option value="07">07</option>
+            <option value="08">08</option>
+            <option value="09">09</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+            <!-- Add more hour options as needed -->
+          </select>
+          :
+          <select class="minute-select input-field">
+            <option value="00">00</option>
+            <option value="15">15</option>
+            <option value="30">30</option>
+            <option value="45">45</option>
+
+            <!-- Add more minute options as needed -->
+          </select>
+        </div>
+      </div>
+      <div class="price-container">
+        <span class="price-label">Price:</span>
+        <span class="highlighted-price">$10.99</span>
+      </div>
+      <button class="reserve-button">Reserve Now</button>
+    </div>
   {/if}
 </main>
 
@@ -59,7 +109,26 @@
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
     display: flex;
+    align-items: center;
     flex-direction: column;
     overflow-y: auto; /* Enable both mouse and touch scrolling */
+  }
+
+  .input-field {
+    font-size: 16px; /* Adjust the font size as needed */
+    padding: 8px; /* Adjust the padding as needed */
+    border: 2px solid var(--color-primary); /* Add a border with your desired color */
+    border-radius: 5px; /* Add rounded corners */
+    width: 60px; /* Adjust the width as needed */
+    margin: 0 5px; /* Add some spacing between the fields */
+    background-color: white; /* Set the background color */
+    color: var(--color-primary); /* Set the text color */
+    outline: none; /* Remove the default outline */
+    transition: border-color 0.2s, box-shadow 0.2s; /* Add a transition effect */
+  }
+
+  .input-field:focus {
+    border-color: var(--color-secondary); /* Change the border color on focus */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add a subtle box-shadow on focus */
   }
 </style>
