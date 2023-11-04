@@ -83,7 +83,9 @@
       </div>
       <div class="price-container">
         <span class="price-label">Price:</span>
-        <span class="highlighted-price">10$ in Zone {spot.parkingSpotZone.slice(-1)}</span>
+        <span class="highlighted-price"
+          >10$ in Zone {spot.parkingSpotZone.slice(-1)}</span
+        >
       </div>
       <button class="reserve-button">Reserve Now</button>
     </div>

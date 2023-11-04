@@ -2,6 +2,7 @@ package com.example.kaktusi;
 
 import com.azure.messaging.eventhubs.EventHubClientBuilder;
 import com.azure.messaging.eventhubs.EventHubConsumerAsyncClient;
+import com.example.kaktusi.controller.UserController;
 import com.example.kaktusi.entity.ParkingSpotDto;
 import com.example.kaktusi.service.ParkingSpotService;
 import org.springframework.boot.SpringApplication;
@@ -28,7 +29,6 @@ public class KaktusiApplication {
 
 		// Subscribe to events and process them
 		consumerClient.receive().subscribe(eventData -> {
-
 			System.out.println("Received event: " + eventData.getData().getBodyAsString());
 		});
 
