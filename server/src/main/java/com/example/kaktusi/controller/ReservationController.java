@@ -1,0 +1,33 @@
+package com.example.kaktusi.controller;
+
+import com.example.kaktusi.entity.ParkingSpotDto;
+import com.example.kaktusi.entity.ParkingSpotReservation;
+import com.example.kaktusi.service.ReservationService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+import java.util.Optional;
+
+@RestController
+public class ReservationController {
+    private final ReservationService reservationService;
+
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
+
+    @PostMapping("/reserve")
+    public void reserveParkingSpot(@RequestBody Map<String, String> body) {
+        String id = body.get("parkingSpotId");
+        Integer endH = Integer.valueOf(body.get("endH"));
+        Integer endM = Integer.valueOf(body.get("endM"));
+        ParkingSpotReservation parkingSpotRe = null;
+        parkingSpotRe.setEndH(endH);
+        parkingSpotRe.setEndM(endM);
+        parkingSpotRe.setId(id);
+        reservationService.reserveParkingSpot(parkingSpotRe);
+    }
+}
