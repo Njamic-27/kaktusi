@@ -16,7 +16,7 @@ public class EventService {
     }
 
     public void handleEvent(String id, boolean occupy, String time) {
-        if (occupy) {
+        if (occupy) { //isOccupied iz false u true
             parkingSpotRepository.occupySpot(id);
         } else {
             parkingSpotRepository.freeSpot(id);

@@ -4,6 +4,7 @@ import com.example.kaktusi.entity.ParkingSpotDto;
 import com.example.kaktusi.entity.ParkingSpotReservation;
 import com.example.kaktusi.service.ReservationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class ReservationController {
     private final ReservationService reservationService;
 
@@ -19,7 +21,7 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @PostMapping("/reserve")
+    @PostMapping("/api/parking/reserve")
     public void reserveParkingSpot(@RequestBody Map<String, String> body) {
         String id = body.get("parkingSpotId");
         Integer endH = Integer.valueOf(body.get("endH"));
