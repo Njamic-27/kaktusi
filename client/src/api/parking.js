@@ -12,6 +12,9 @@ const urls = {
   update(id) {
     return `${this.root}/update/${id}`;
   },
+  deleteSpot(id) {
+    return `${this.root}/delete/${id}`;
+  },
   get makeReservation() {
     return this.root + "/reserve";
   },
@@ -38,10 +41,15 @@ const update = (id, zone, type) => {
   const result = request.put(urls.update(id), { zone, type }).then(extractData);
   return result;
 };
+const deleteSpot = (id) => {
+  const result = request.put(urls.update(id)).then(extractData);
+  return result;
+};
 
 export default {
   fetchAll,
   fetchPrice,
   makeReservation,
   update,
+  deleteSpot,
 };

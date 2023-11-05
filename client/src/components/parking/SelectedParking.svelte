@@ -64,7 +64,11 @@
   }
 
   const saveChangesAdmin = async () => {
-    parkingApi.update(spot.id, selectedZone, selectedType);
+    await parkingApi.update(spot.id, selectedZone, selectedType);
+  };
+
+  const deleteSpot = async () => {
+    await parkingApi.deleteSpot(spot.id);
   };
 
   async function handleReservation() {
@@ -158,6 +162,7 @@
           {/each}
         </select>
         <button class="button" on:click={saveChangesAdmin}>Save changes</button>
+        <button class="button" on:click={deleteSpot}>Save changes</button>
       {/if}
     </div>
   {/if}
