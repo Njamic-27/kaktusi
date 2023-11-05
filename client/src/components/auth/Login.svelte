@@ -49,7 +49,7 @@
 </script>
 
 <main>
-  <div class="main-title">Hackathon</div>
+  <div class="main-title">Parktus</div>
   {#if error}
     <div class="error">Failed to log in!</div>
   {/if}
@@ -102,7 +102,7 @@
 
   .main-title {
     font-size: 3rem;
-    font-family: "Dancing Script", cursive;
+    font-family: "Poppins";
     font-weight: 800;
     width: 100%;
     text-align: center;
