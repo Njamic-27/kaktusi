@@ -29,7 +29,6 @@ public class ParkingSpotService {
     public List<ParkingSpotDto> getAllParkingSpotsDatabase() {
         return parkingSpotRepository.findAll();
     }
-
     public List<ParkingSpotDto> getAllParkingSpots() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("accept", MediaType.APPLICATION_JSON_VALUE);
