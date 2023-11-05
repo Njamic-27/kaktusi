@@ -32,13 +32,18 @@
     displaySelected = true;
   }
 
-  async function refreshData() {
+  const refreshData = async () => {
+    console.log("refresh");
     loaded = false;
+    console.log(loaded);
     spots = await parkingApi.fetchAll();
+    spotsForDisplay = spots;
     if (spots.length > 0) {
       loaded = true;
     }
-  }
+    console.log("refresh2");
+    console.log(loaded);
+  };
 
   const applyFilter = async ({ detail }) => {
     let selected = detail.selected;
