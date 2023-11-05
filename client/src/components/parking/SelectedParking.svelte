@@ -100,7 +100,7 @@
       <div class="price-container">
         <span class="price-label">Price:</span>
         <span class="highlighted-price"
-          >10$ in Zone {spot.parkingSpotZone.slice(-1)}</span
+          >{price}€ in Zone {spot.parkingSpotZone.slice(-1)}</span
         >
       </div>
       {#if !spot.occupied}

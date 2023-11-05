@@ -33,11 +33,14 @@
   }
 
   async function refreshData() {
+    console.log("refresh");
     loaded = false;
     spots = await parkingApi.fetchAll();
+    spotsForDisplay = spots;
     if (spots.length > 0) {
       loaded = true;
     }
+    console.log("refresh2");
   }
 
   const applyFilter = async ({ detail }) => {
