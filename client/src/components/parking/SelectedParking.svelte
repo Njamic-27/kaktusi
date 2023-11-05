@@ -162,6 +162,7 @@
           {/each}
         </select>
         <button class="button" on:click={saveChangesAdmin}>Save changes</button>
+        <button class="button"><i class="fa-solid fa-chart-simple" /></button>
         <button class="button" on:click={deleteSpot}>Delete parking spot</button
         >
       {/if}
@@ -246,8 +247,8 @@
     background-color: var(--color-accent);
     height: 50px;
     margin: 0;
-    padding: 20px;
     font-size: larger;
+    padding: 20px 0px;
     font-weight: 800;
   }
 </style>

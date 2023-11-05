@@ -39,10 +39,12 @@ const makeReservation = async (endH, endM, parkingSpotId) => {
 
 const update = (id, zone, type) => {
   const result = request.put(urls.update(id), { zone, type }).then(extractData);
+  console.log(result);
   return result;
 };
 const deleteSpot = (id) => {
   const result = request.delete(urls.deleteSpot(id)).then(extractData);
+  console.log(result);
   return result;
 };
 
