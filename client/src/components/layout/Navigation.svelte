@@ -19,11 +19,6 @@
         ><i class="fa-solid fa-upload" /></Button
       >
     {/if}
-    {#if isAdmin()}
-      <Button on:click={() => redirect("/")} inline
-        ><i class="fa-solid fa-user" /></Button
-      >
-    {/if}
   </section>
 </nav>
 
