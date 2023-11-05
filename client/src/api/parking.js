@@ -9,6 +9,9 @@ const urls = {
   fetchPrice(id) {
     return `${this.root}/price/${id}`;
   },
+  update(id) {
+    return `${this.root}/update/${id}`;
+  },
   get makeReservation() {
     return this.root + "/reserve";
   },
@@ -28,11 +31,17 @@ const makeReservation = async (endH, endM, parkingSpotId) => {
   const result = await request
     .post(urls.makeReservation, { endH, endM, parkingSpotId })
     .then(extractData);
-  console.log("RES " + result);
   return result;
 };
+
+const update = (id, zone, type) => {
+  const result = request.put(urls.update(id), { zone, type }).then(extractData);
+  return result;
+};
+
 export default {
   fetchAll,
   fetchPrice,
   makeReservation,
+  update,
 };
