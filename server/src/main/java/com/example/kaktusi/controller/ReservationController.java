@@ -26,7 +26,7 @@ public class ReservationController {
         String id = body.get("parkingSpotId");
         Integer endH = Integer.valueOf(body.get("endH"));
         Integer endM = Integer.valueOf(body.get("endM"));
-        ParkingSpotReservation parkingSpotRe = null;
+        ParkingSpotReservation parkingSpotRe = new ParkingSpotReservation();
         parkingSpotRe.setEndH(endH);
         parkingSpotRe.setEndM(endM);
         parkingSpotRe.setId(id);
