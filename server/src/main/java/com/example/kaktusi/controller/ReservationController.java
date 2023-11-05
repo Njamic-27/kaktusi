@@ -22,7 +22,7 @@ public class ReservationController {
     }
 
     @PostMapping("/api/parking/reserve")
-    public void reserveParkingSpot(@RequestBody Map<String, String> body) {
+    public boolean reserveParkingSpot(@RequestBody Map<String, String> body) {
         String id = body.get("parkingSpotId");
         Integer endH = Integer.valueOf(body.get("endH"));
         Integer endM = Integer.valueOf(body.get("endM"));
@@ -30,6 +30,6 @@ public class ReservationController {
         parkingSpotRe.setEndH(endH);
         parkingSpotRe.setEndM(endM);
         parkingSpotRe.setId(id);
-        reservationService.reserveParkingSpot(id, endH, endM);
+        return reservationService.reserveParkingSpot(id, endH, endM);
     }
 }
