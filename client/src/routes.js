@@ -8,6 +8,7 @@ import Auth from "./components/auth/Auth.svelte";
 import Home from "./components/home/Home.svelte";
 import Parking from "@/components/parking/Parking.svelte";
 import { isAdmin, isLoggedIn } from "./stores/auth";
+import CreateParking from "./components/admin/createParking.svelte";
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: "/map",
     name: "Parking",
     component: Parking,
+  },
+  {
+    path: "/admin",
+    name: "CreateSpot",
+    component: CreateParking,
   },
 ];
 

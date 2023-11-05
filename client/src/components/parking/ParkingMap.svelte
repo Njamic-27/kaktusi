@@ -57,15 +57,17 @@
 
   function updateSpotVisibility(map) {
     const currentZoom = map.getZoom();
-    spots.forEach((spot) => {
-      if (currentZoom >= minZoomToShowSpots) {
-        // Show the spot marker
-        spot.markerData.addTo(map);
-      } else {
-        // Hide the spot marker
-        map.removeLayer(spot.markerData);
-      }
-    });
+    if (spots.length > 0) {
+      spots.forEach((spot) => {
+        if (currentZoom >= minZoomToShowSpots) {
+          // Show the spot marker
+          spot.markerData.addTo(map);
+        } else {
+          // Hide the spot marker
+          map.removeLayer(spot.markerData);
+        }
+      });
+    }
   }
 
   onMount(async () => {

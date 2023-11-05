@@ -14,12 +14,10 @@ export const isLoggedIn = () => {
 export const isAdmin = () => {
   let val;
   user.subscribe((value) => (val = value));
-  console.log(user);
   return val && val.role === "ADMIN";
 };
 
 export const logout = async () => {
-  //await authApi.logout();
   user.set(null);
   redirect("Auth");
 };

@@ -21,9 +21,10 @@ public class ParkingSpotController{
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteParkingSpot(@RequestParam("id") String id) {
+    public void deleteParkingSpot(@PathVariable String id) {
         parkingSpotService.deleteParkingSpot(id);
     }
+
 
     @PostMapping("/add")
     public void addParkingSpot(@RequestBody Map<String, String> body) {
@@ -35,11 +36,12 @@ public class ParkingSpotController{
     }
 
     @PutMapping("/update/{id}")
-    public void updateParkingSpot(@RequestParam("id") String id, @RequestBody Map<String, String> body) {
+    public void updateParkingSpot(@PathVariable String id, @RequestBody Map<String, String> body) {
         String type = body.get("type");
         String zone = body.get("zone");
         parkingSpotService.updateParkingSpot(id, type, zone);
     }
+
 
     @GetMapping("/all")
     public List<ParkingSpotDto> getAllParkingSpots() {

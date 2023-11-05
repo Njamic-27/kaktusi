@@ -3,10 +3,12 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { parkingApi } from "@/api";
   import { isAdmin } from "@/stores/auth";
+  import { redirect } from "@/utils/router/routing";
 
   export let spot;
   let address = "";
-  let displayCard = false;
+  $: displayCard = false;
+  let displayMessage = false;
   let price = 0;
   let displayAdminActions = false;
 
@@ -39,6 +41,8 @@
   // Create a Nominatim API request URL
   const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
   onMount(async () => {
+    displayCard = false;
+
     const id = spot.id;
     price = await parkingApi.fetchPrice(id);
 
@@ -65,26 +69,48 @@
 
   const saveChangesAdmin = async () => {
     await parkingApi.update(spot.id, selectedZone, selectedType);
+    dispatchRefresh();
   };
 
   const deleteSpot = async () => {
-    await parkingApi.deleteSpot(spot.id);
+    let res = parkingApi.deleteSpot(spot.id);
+    if (res) dispatchRefresh();
   };
 
   async function handleReservation() {
+    displayCard = false;
     let endH = selectedHour;
     let endM = selectedMinute;
     let parkingSpotId = spot.id;
     let response = await parkingApi.makeReservation(endH, endM, parkingSpotId);
-    console.log("Stipe kaže");
     console.log(response);
-    console.log("karla");
-    dispatch("refresh");
+    if (response) {
+      displayCard = false;
+      displayMessage = true;
+      setTimeout(() => {
+        displayMessage = false;
+        redirect("Parking");
+      }, 2000);
+    } else {
+      alert("Error");
+    }
   }
+
+  const dispatchRefresh = async () => {
+    dispatch("refresh");
+  };
+
+  const getStats = async () => {
+    const res = await parkingApi.fetchStats(spot.id);
+    console.log(res);
+  };
 </script>
 
 <main>
-  {#if displayCard}
+  {#if displayMessage}
+    <div class="success">Successful reservation</div>
+  {/if}
+  {#if displayCard === true}
     <div class="cardContainer" in:slide={{ delay: 200 }} out:slide>
       <div class="spot-title">{address}</div>
       <p class="parking-type">Parking type: {spot.parkingSpotType}</p>
@@ -162,7 +188,9 @@
           {/each}
         </select>
         <button class="button" on:click={saveChangesAdmin}>Save changes</button>
-        <button class="button"><i class="fa-solid fa-chart-simple" /></button>
+        <button class="button" on:click={getStats}
+          ><i class="fa-solid fa-chart-simple" /></button
+        >
         <button class="button" on:click={deleteSpot}>Delete parking spot</button
         >
       {/if}
@@ -180,6 +208,23 @@
     display: flex;
     justify-content: center;
     align-items: flex-end;
+  }
+
+  .success {
+    position: absolute;
+    font-size: larger;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 300px;
+    height: 150px;
+    background-color: var(--color-primary);
+    border-radius: 15px;
+    border: 3px solid var(--color-accent);
+    color: white;
+    z-index: 5;
+    top: 0;
   }
 
   .button {
