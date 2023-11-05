@@ -5,9 +5,7 @@
 </script>
 
 <nav>
-  <section class="container">
-   
-  </section>
+  <section class="container" />
 
   <section class="mobile-container">
     <Button on:click={() => redirect("Home")} inline
@@ -16,11 +14,13 @@
     <Button on:click={() => redirect("Parking")} inline
       ><i class="fa-solid fa-square-parking" /></Button
     >
-    <Button on:click={() => redirect("Home")} inline
-      ><i class="fa-solid fa-upload" /></Button
-    >
+    {#if isAdmin}
+      <Button on:click={() => redirect("Home")} inline
+        ><i class="fa-solid fa-upload" /></Button
+      >
+    {/if}
     {#if isAdmin()}
-      <Button on:click={() => redirect("AdminOption")} inline
+      <Button on:click={() => redirect("/")} inline
         ><i class="fa-solid fa-user" /></Button
       >
     {/if}
@@ -60,20 +60,6 @@
       height: 92vh;
       border-right: 3px solid var(--color-secondary);
       background-color: var(--color-primary);
-    }
-
-    .links {
-      display: grid;
-      grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
-      justify-content: center;
-      align-items: center;
-      height: 50%;
-      text-align: center;
-    }
-
-    .links > :global(button) {
-      font-size: 1rem;
-      color: var(--color-white);
     }
 
     .mobile-container {

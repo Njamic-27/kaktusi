@@ -1,12 +1,15 @@
 <script>
+  import { isAdmin } from "@/stores/auth";
   import { redirect } from "@/utils/router/routing";
   const goToMap = () => {
     redirect("Parking");
   };
+  let a = isAdmin();
+  console.log(a);
 </script>
 
 <main>
-  <img class="logo" src="./src/public/markers/green_marker.png" alt="">
+  <img class="logo" src="./src/public/markers/green_marker.png" alt="" />
   <button on:click={goToMap}>Find parking</button>
   <div class="image-home">
     <img
@@ -30,10 +33,10 @@
     margin-top: 8vh;
     margin-bottom: 8vh;
   }
-  .logo{
-  scale: 0.3;
-  position: absolute;
-  top: 0;
+  .logo {
+    scale: 0.3;
+    position: absolute;
+    top: 0;
   }
 
   button {

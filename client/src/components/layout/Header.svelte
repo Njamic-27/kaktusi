@@ -50,7 +50,7 @@
     text-align: center;
     font-family: "Poppins";
     font-weight: 800;
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 
   .profile {

@@ -14,7 +14,8 @@ export const isLoggedIn = () => {
 export const isAdmin = () => {
   let val;
   user.subscribe((value) => (val = value));
-  return val && val.role.name === "ADMIN";
+  console.log(user);
+  return val && val.role === "ADMIN";
 };
 
 export const logout = async () => {

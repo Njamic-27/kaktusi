@@ -35,8 +35,8 @@ public class ParkingSpotController{
     }
 
     @PutMapping("/update/{id}")
-    public void updateParkingSpot(@RequestParam("id") String id, @RequestParam("type") String type) {
-        parkingSpotService.updateParkingSpot(id, type);
+    public void updateParkingSpot(@RequestParam("id") String id, @RequestParam("parkingSpotType") String type, @RequestParam("parkingSpotZone") String zone) {
+        parkingSpotService.updateParkingSpot(id, type, zone);
     }
 
     @GetMapping("/all")

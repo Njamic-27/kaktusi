@@ -2,11 +2,32 @@
   import { fade, fly, scale, slide } from "svelte/transition";
   import { createEventDispatcher, onMount } from "svelte";
   import { parkingApi } from "@/api";
+  import { isAdmin } from "@/stores/auth";
 
   export let spot;
   let address = "";
   let displayCard = false;
   let price = 0;
+  let displayAdminActions = false;
+
+  let selectedZone = spot.parkingSpotZone; // Initialize with an empty value
+  let selectedType = spot.parkingSpotType; // Initialize with an empty value
+
+  if (isAdmin()) {
+    displayAdminActions = true;
+  }
+
+  function handleZoneChange(event) {
+    selectedZone = event.target.value;
+  }
+
+  // Function to handle changes in the selected type
+  function handleTypeChange(event) {
+    selectedType = event.target.value;
+  }
+
+  const zoneOptions = ["Zone1", "Zone2", "Zone3", "Zone4"];
+  const typeOptions = ["NORMAL", "HANDICAP", "ELECTRIC"];
 
   let selectedHour = "00"; // Initialize with a default value
   let selectedMinute = "00"; // Initialize with a default value
@@ -42,6 +63,10 @@
     window.location.href = url;
   }
 
+  const saveChangesAdmin = async () => {
+    parkingApi.update(spot.id, selectedZone, selectedType);
+  };
+
   async function handleReservation() {
     let endH = selectedHour;
     let endM = selectedMinute;
@@ -57,7 +82,7 @@
 <main>
   {#if displayCard}
     <div class="cardContainer" in:slide={{ delay: 200 }} out:slide>
-      <h3 class="spot-title">{address}</h3>
+      <div class="spot-title">{address}</div>
       <p class="parking-type">Parking type: {spot.parkingSpotType}</p>
       <div class="time-container">
         <span class="time-label">End Time:</span>
@@ -110,6 +135,30 @@
         <button class="button" on:click={handleReservation}>Reserve Now</button>
       {/if}
       <button class="button" on:click={navigate}>Navigate</button>
+      {#if displayAdminActions}
+        <label for="zone">Parking Zone:</label>
+        <select
+          id="zone"
+          bind:value={selectedZone}
+          on:change={handleZoneChange}
+        >
+          {#each zoneOptions as zone (zone)}
+            <option value={zone}>{zone}</option>
+          {/each}
+        </select>
+
+        <label for="type">Parking Type:</label>
+        <select
+          id="type"
+          bind:value={selectedType}
+          on:change={handleTypeChange}
+        >
+          {#each typeOptions as type (type)}
+            <option value={type}>{type}</option>
+          {/each}
+        </select>
+        <button class="button" on:click={saveChangesAdmin}>Save changes</button>
+      {/if}
     </div>
   {/if}
 </main>
@@ -129,7 +178,7 @@
   .button {
     border: 2px solid var(--color-primary);
     padding: 5px;
-    border-radius: 5px;
+    border-radius: 10px;
     margin: 5px;
     font-family: "Poppins";
     font-size: large;
@@ -171,5 +220,28 @@
   .input-field:focus {
     border-color: var(--color-secondary); /* Change the border color on focus */
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add a subtle box-shadow on focus */
+  }
+
+  select {
+    width: 50%;
+    padding: 10px;
+    font-size: large;
+    border: 3px solid var(--color-primary);
+    border-radius: 10px;
+    color: white;
+    background-color: var(--color-accent);
+    margin-bottom: 5px;
+  }
+
+  .spot-title {
+    width: 100%;
+    height: 70px;
+    text-align: center;
+    background-color: var(--color-accent);
+    height: 50px;
+    margin: 0;
+    padding: 20px;
+    font-size: larger;
+    font-weight: 800;
   }
 </style>
