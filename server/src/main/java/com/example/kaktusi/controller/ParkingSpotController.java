@@ -20,7 +20,7 @@ public class ParkingSpotController{
         this.parkingSpotService = parkingSpotService;
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete/{id}")
     public void deleteParkingSpot(@RequestParam("id") String id) {
         parkingSpotService.deleteParkingSpot(id);
     }
@@ -35,7 +35,9 @@ public class ParkingSpotController{
     }
 
     @PutMapping("/update/{id}")
-    public void updateParkingSpot(@RequestParam("id") String id, @RequestParam("parkingSpotType") String type, @RequestParam("parkingSpotZone") String zone) {
+    public void updateParkingSpot(@RequestParam("id") String id, @RequestBody Map<String, String> body) {
+        String type = body.get("type");
+        String zone = body.get("zone");
         parkingSpotService.updateParkingSpot(id, type, zone);
     }
 
