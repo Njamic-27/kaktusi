@@ -46,7 +46,8 @@
     let endH = selectedHour;
     let endM = selectedMinute;
     let parkingSpotId = spot.id;
-    parkingApi.makeReservation(endH, endM, parkingSpotId);
+    let response = parkingApi.makeReservation(endH, endM, parkingSpotId);
+    
     dispatch("refresh");
   }
 </script>

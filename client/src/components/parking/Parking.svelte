@@ -32,7 +32,7 @@
     displaySelected = true;
   }
 
-  async function refreshData() {
+  const refreshData = async () => {
     console.log("refresh");
     loaded = false;
     spots = await parkingApi.fetchAll();
@@ -41,7 +41,7 @@
       loaded = true;
     }
     console.log("refresh2");
-  }
+  };
 
   const applyFilter = async ({ detail }) => {
     let selected = detail.selected;

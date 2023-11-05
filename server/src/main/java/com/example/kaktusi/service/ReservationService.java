@@ -2,10 +2,12 @@ package com.example.kaktusi.service;
 
 import com.example.kaktusi.entity.ParkingSpotDto;
 import com.example.kaktusi.entity.ParkingSpotReservation;
+import com.example.kaktusi.model.ResModel;
 import com.example.kaktusi.repository.ParkingSpotRepository;
 import com.example.kaktusi.repository.ReservationRepository;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,7 +29,7 @@ public class ReservationService {
         Optional<ParkingSpotDto> parkingSpotOptional = parkingSpotRepository.findById(id);
         if (parkingSpotOptional.isPresent()) {
             HttpHeaders headers = new HttpHeaders();
-            headers.add("accept", MediaType.APPLICATION_JSON_VALUE);
+            headers.setContentType(MediaType.APPLICATION_JSON);
             headers.add("Api-Key", apiKey);
 
             ParkingSpotDto parkingSpot = parkingSpotOptional.get();
@@ -38,15 +40,33 @@ public class ReservationService {
                 parkingSpotReservation.setEndM(endM);
                 parkingSpotRepository.occupySpot(parkingSpot.getId());
                 reservationRepository.save(parkingSpotReservation);
-                HttpEntity<ParkingSpotReservation> entity = new HttpEntity<>(parkingSpotReservation,headers);
+                ResModel model = new ResModel();
+                model.setParkingSpotId(parkingSpotReservation.getId());
+                model.setEndH(parkingSpotReservation.getEndH());
+                model.setEndM(parkingSpotReservation.getEndM());
+                HttpEntity<ResModel> entity = new HttpEntity<>(model,headers);
                 RestTemplate restTemplate = new RestTemplate();
 
-                ResponseEntity<ParkingSpotReservation> responseEntity = restTemplate.exchange(
-                        apiUrl,
-                        HttpMethod.POST,
-                        entity,
-                        ParkingSpotReservation.class
-                );
+                try {
+                    ResponseEntity<ParkingSpotReservation> responseEntity = restTemplate.exchange(
+                            apiUrl,
+                            HttpMethod.POST,
+                            entity,
+                            ParkingSpotReservation.class
+                    );
+
+                    // Process the response entity
+                    ParkingSpotReservation response = responseEntity.getBody();
+
+                    // Continue processing the response
+                } catch (HttpStatusCodeException e) {
+                    String responseBody = e.getResponseBodyAsString();
+                    HttpStatus statusCode = (HttpStatus) e.getStatusCode();
+
+                    // Handle the exception gracefully
+                    System.err.println("Request failed with status code: " + statusCode);
+                    System.err.println("Response body: " + responseBody);
+                }
             }
 
         }
