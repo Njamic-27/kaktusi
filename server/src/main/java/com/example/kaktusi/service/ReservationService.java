@@ -25,7 +25,7 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public void reserveParkingSpot(String id, Integer endH, Integer endM) {
+    public boolean reserveParkingSpot(String id, Integer endH, Integer endM) {
         Optional<ParkingSpotDto> parkingSpotOptional = parkingSpotRepository.findById(id);
         if (parkingSpotOptional.isPresent()) {
             HttpHeaders headers = new HttpHeaders();
@@ -66,9 +66,11 @@ public class ReservationService {
                     // Handle the exception gracefully
                     System.err.println("Request failed with status code: " + statusCode);
                     System.err.println("Response body: " + responseBody);
+                    return false;
                 }
             }
 
         }
+        return true;
     }
 }
