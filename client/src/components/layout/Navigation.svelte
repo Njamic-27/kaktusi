@@ -6,23 +6,14 @@
 
 <nav>
   <section class="container">
-    <div class="links">
-      <Button on:click={() => redirect("Home")} inline>Naslovnica</Button>
-      <Button on:click={() => redirect("Accomodations")} inline
-        >Svi recepti</Button
-      >
-      <Button on:click={() => redirect("CreateAccomodation")} inline
-        >Objavi smjestaj</Button
-      >
-      <Button on:click={() => redirect("Home")} inline>Profil</Button>
-    </div>
+   
   </section>
 
   <section class="mobile-container">
     <Button on:click={() => redirect("Home")} inline
       ><i class="fa-solid fa-house" /></Button
     >
-    <Button on:click={() => redirect("Home")} inline
+    <Button on:click={() => redirect("Parking")} inline
       ><i class="fa-solid fa-square-parking" /></Button
     >
     <Button on:click={() => redirect("Home")} inline

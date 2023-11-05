@@ -4,6 +4,13 @@
   import "leaflet/dist/leaflet.css";
 
   export let spots;
+  export let currentState;
+
+  let mapState = {
+    latitude: 45.815,
+    longitude: 15.9819,
+    zoomLevel: 13,
+  };
 
   // Define marker icons with different colors
   const redIcon = L.icon({
@@ -35,11 +42,18 @@
 
   const dispatch = createEventDispatcher();
   let selectedMarker = null;
-  let minZoomToShowSpots = 17; // Adjust this zoom level as needed
+  let minZoomToShowSpots = 16; // Adjust this zoom level as needed
 
-  const latitude = 45.815;
-  const longitude = 15.9819;
-  const zoomLevel = 13;
+  let latitude = 45.815;
+  let longitude = 15.9819;
+  let zoomLevel = 13;
+
+  if (currentState) {
+    latitude = currentState.latitude;
+    longitude = currentState.longitude;
+    zoomLevel = currentState.zoomLevel;
+  }
+  let map;
 
   function updateSpotVisibility(map) {
     const currentZoom = map.getZoom();
@@ -55,7 +69,7 @@
   }
 
   onMount(async () => {
-    const map = L.map("map").setView([latitude, longitude], zoomLevel);
+    map = L.map("map").setView([latitude, longitude], zoomLevel);
 
     L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
       maxZoom: 19,
@@ -97,6 +111,14 @@
 
     map.on("zoomend", () => {
       updateSpotVisibility(map);
+    });
+
+    map.on("moveend", () => {
+      const center = map.getCenter();
+      mapState.latitude = center.lat;
+      mapState.longitude = center.lng;
+      mapState.zoomLevel = map.getZoom();
+      dispatch("mapMove", mapState);
     });
 
     // Initialize spot visibility
