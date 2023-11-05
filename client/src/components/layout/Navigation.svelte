@@ -14,7 +14,7 @@
     <Button on:click={() => redirect("Parking")} inline
       ><i class="fa-solid fa-square-parking" /></Button
     >
-    {#if isAdmin}
+    {#if isAdmin()}
       <Button on:click={() => redirect("Home")} inline
         ><i class="fa-solid fa-upload" /></Button
       >

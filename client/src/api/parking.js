@@ -42,7 +42,7 @@ const update = (id, zone, type) => {
   return result;
 };
 const deleteSpot = (id) => {
-  const result = request.put(urls.update(id)).then(extractData);
+  const result = request.delete(urls.deleteSpot(id)).then(extractData);
   return result;
 };
 

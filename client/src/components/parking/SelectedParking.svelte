@@ -162,7 +162,8 @@
           {/each}
         </select>
         <button class="button" on:click={saveChangesAdmin}>Save changes</button>
-        <button class="button" on:click={deleteSpot}>Save changes</button>
+        <button class="button" on:click={deleteSpot}>Delete parking spot</button
+        >
       {/if}
     </div>
   {/if}
