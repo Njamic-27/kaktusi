@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -35,6 +36,7 @@ public class EventService {
         LocalTime localTime = LocalTime.parse(time);
         occupyLog.setTimestamp(localTime);
         occupyLog.setOccupied(occupy);
+        occupyLog.setTimeNow(LocalDateTime.now());
         occupyLogRepository.save(occupyLog);
     }
     @Scheduled(fixedRate = 1000)
@@ -76,7 +78,6 @@ public class EventService {
             } else if (timeValue.length() == 4) {
                 timeValue = timeValue.substring(0, 3) + "0" + timeValue.substring(3);
             }
-
             handleEvent(id, isOccupied, timeValue);
             System.out.println("Received event: " + eventData.getData().getBodyAsString());
            });
