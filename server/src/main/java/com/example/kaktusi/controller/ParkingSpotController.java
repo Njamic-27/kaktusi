@@ -1,5 +1,4 @@
 package com.example.kaktusi.controller;
-
 import com.example.kaktusi.entity.ParkingSpotDto;
 import com.example.kaktusi.entity.ParkingSpotType;
 import com.example.kaktusi.entity.ParkingSpotZone;
@@ -13,6 +12,7 @@ import java.util.List;
 @RequestMapping("/api/parking")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ParkingSpotController{
+
     private final ParkingSpotService parkingSpotService;
 
     @Autowired
@@ -32,6 +32,11 @@ public class ParkingSpotController{
         ParkingSpotZone parkingSpotZone = ParkingSpotZone.valueOf(body.get("parkingSpotZone"));
         ParkingSpotType parkingSpotType = ParkingSpotType.valueOf(body.get("parkingSpotType"));
         parkingSpotService.addParkingSpot(latitude, longitude, parkingSpotZone, parkingSpotType);
+    }
+
+    @PutMapping("/update/{id}")
+    public void updateParkingSpot(@RequestParam("id") String id, @RequestParam("type") String type) {
+        parkingSpotService.updateParkingSpot(id, type);
     }
 
     @GetMapping("/all")

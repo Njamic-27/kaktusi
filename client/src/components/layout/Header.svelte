@@ -1,7 +1,7 @@
 <script>
-  import { slide } from 'svelte/transition';
-  import { logout } from '@/stores/auth';
-  import { redirect } from '@/utils/router/routing';
+  import { slide } from "svelte/transition";
+  import { logout } from "@/stores/auth";
+  import { redirect } from "@/utils/router/routing";
 
   let optionsVisible = false;
   function toggleOptionsVisibility() {
@@ -12,22 +12,22 @@
 <header>
   <section class="header">
     <div />
-    <h1 class="title">Kaktus parking</h1>
+    <h1 class="title">Parktus</h1>
     <button class="profile" on:click={toggleOptionsVisibility}>
       <i class="fa-regular fa-circle-user" />
     </button>
   </section>
   {#if optionsVisible}
     <aside transition:slide>
-      <button on:click={() => redirect('/')}>Option1</button>
-      <button on:click={() => redirect('/')}>Option2</button>
+      <button on:click={() => redirect("/")}>Option1</button>
+      <button on:click={() => redirect("/")}>Option2</button>
       <button on:click={logout}>Logout</button>
     </aside>
   {/if}
 </header>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+  @import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
   header {
     position: fixed;
     top: 0;
@@ -48,7 +48,7 @@
   .title {
     margin: auto;
     text-align: center;
-    font-family: 'Dancing Script', cursive;
+    font-family: "Poppins";
     font-weight: 800;
     font-size: 2.5rem;
   }

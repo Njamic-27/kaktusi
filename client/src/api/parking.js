@@ -6,6 +6,9 @@ const urls = {
   get fetchAll() {
     return this.root + "/all";
   },
+  fetchPrice(id) {
+    return `${this.root}/price/${id}`;
+  },
 };
 
 const fetchAll = async () => {
@@ -13,6 +16,13 @@ const fetchAll = async () => {
   return result;
 };
 
+const fetchPrice = (id) => {
+  console.log(id);
+  const result = request.get(urls.fetchPrice(id)).then(extractData);
+  return result;
+};
+
 export default {
   fetchAll,
+  fetchPrice,
 };
