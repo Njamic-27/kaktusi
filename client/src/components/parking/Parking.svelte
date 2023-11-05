@@ -124,7 +124,7 @@
     />
     {#if selectedSpot !== null}
       {#key selectedSpot}
-        <SelectedParking spot={selectedSpot} />
+        <SelectedParking spot={selectedSpot} on:refresh={refreshData} />
       {/key}
     {/if}
   {/if}

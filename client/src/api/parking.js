@@ -9,6 +9,9 @@ const urls = {
   fetchPrice(id) {
     return `${this.root}/price/${id}`;
   },
+  get makeReservation() {
+    return this.root + "/reserve";
+  },
 };
 
 const fetchAll = async () => {
@@ -17,12 +20,18 @@ const fetchAll = async () => {
 };
 
 const fetchPrice = (id) => {
-  console.log(id);
   const result = request.get(urls.fetchPrice(id)).then(extractData);
   return result;
 };
 
+const makeReservation = (endH, endM, parkingSpotId) => {
+  const result = request
+    .post(urls.makeReservation, { endH, endM, parkingSpotId })
+    .then(extractData);
+  return result;
+};
 export default {
   fetchAll,
   fetchPrice,
+  makeReservation,
 };

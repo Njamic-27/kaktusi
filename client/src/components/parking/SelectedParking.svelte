@@ -1,6 +1,6 @@
 <script>
   import { fade, fly, scale, slide } from "svelte/transition";
-  import { onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { parkingApi } from "@/api";
 
   export let spot;
@@ -35,14 +35,19 @@
       });
   });
 
+  let dispatch = createEventDispatcher();
+
   function navigate() {
     const url = `https://www.google.com/maps?q=${lat},${lng}`;
     window.location.href = url;
   }
 
   function handleReservation() {
-    let time = `${selectedHour}:${selectedMinute}`;
-    let id = spot.id;
+    let endH = selectedHour;
+    let endM = selectedMinute;
+    let parkingSpotId = spot.id;
+    parkingApi.makeReservation(endH, endM, parkingSpotId);
+    dispatch("refresh");
   }
 </script>
 

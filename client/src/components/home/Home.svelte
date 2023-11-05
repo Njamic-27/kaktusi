@@ -6,6 +6,7 @@
 </script>
 
 <main>
+  <img class="logo" src="./src/public/markers/green_marker.png" alt="">
   <button on:click={goToMap}>Find parking</button>
   <div class="image-home">
     <img
@@ -29,8 +30,15 @@
     margin-top: 8vh;
     margin-bottom: 8vh;
   }
+  .logo{
+  scale: 0.3;
+  position: absolute;
+  top: 0;
+  }
 
   button {
+    position: absolute;
+    bottom: 150px;
     background: var(--color-primary);
     border: 3px solid var(--color-accent);
     border-radius: 15px;
