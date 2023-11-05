@@ -15,6 +15,8 @@ import lombok.ToString;
 @ToString
 public class ParkingSpotReservation {
     @Id
+    private String resId;
+    @Column
     private String id;
     @Column
     Integer endH;
