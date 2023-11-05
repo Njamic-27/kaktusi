@@ -24,10 +24,11 @@ const fetchPrice = (id) => {
   return result;
 };
 
-const makeReservation = (endH, endM, parkingSpotId) => {
-  const result = request
+const makeReservation = async (endH, endM, parkingSpotId) => {
+  const result = await request
     .post(urls.makeReservation, { endH, endM, parkingSpotId })
     .then(extractData);
+  console.log("RES " + result);
   return result;
 };
 export default {

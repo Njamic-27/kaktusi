@@ -42,12 +42,14 @@
     window.location.href = url;
   }
 
-  function handleReservation() {
+  async function handleReservation() {
     let endH = selectedHour;
     let endM = selectedMinute;
     let parkingSpotId = spot.id;
-    let response = parkingApi.makeReservation(endH, endM, parkingSpotId);
-    
+    let response = await parkingApi.makeReservation(endH, endM, parkingSpotId);
+    console.log("Stipe kaže");
+    console.log(response);
+    console.log("karla");
     dispatch("refresh");
   }
 </script>
