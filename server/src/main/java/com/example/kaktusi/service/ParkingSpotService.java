@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class ParkingSpotService {
@@ -77,6 +78,41 @@ public class ParkingSpotService {
 
     public void addParkingSpot(Double latitude, Double longitude, ParkingSpotZone parkingSpotZone, ParkingSpotType parkingSpotType) {
         ParkingSpotDto parkingSpotDto = new ParkingSpotDto();
+
+        String characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder randomString = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 8; i++) {
+            int index = random.nextInt(characters.length());
+            char randomChar = characters.charAt(index);
+            randomString.append(randomChar);
+        }
+        randomString.append("-");
+        for (int i = 0; i < 4; i++) {
+            int index = random.nextInt(characters.length());
+            char randomChar = characters.charAt(index);
+            randomString.append(randomChar);
+        }
+        randomString.append("-");
+        for (int i = 0; i < 4; i++) {
+            int index = random.nextInt(characters.length());
+            char randomChar = characters.charAt(index);
+            randomString.append(randomChar);
+        }
+        randomString.append("-");
+        for (int i = 0; i < 4; i++) {
+            int index = random.nextInt(characters.length());
+            char randomChar = characters.charAt(index);
+            randomString.append(randomChar);
+        }
+        randomString.append("-");
+        for (int i = 0; i < 12; i++) {
+            int index = random.nextInt(characters.length());
+            char randomChar = characters.charAt(index);
+            randomString.append(randomChar);
+        }
+        String returning = randomString.toString();
+        parkingSpotDto.setId(returning);
         parkingSpotDto.setLatitude(latitude);
         parkingSpotDto.setLongitude(longitude);
         parkingSpotDto.setParkingSpotZone(parkingSpotZone);
@@ -113,9 +149,10 @@ public class ParkingSpotService {
         return null;
     }
 
-    public void updateParkingSpot(String id, String type) {
+    public void updateParkingSpot(String id,String type, String zone) {
         ParkingSpotDto parkingSpot = parkingSpotRepository.findById(id).orElseThrow();
         parkingSpot.setParkingSpotType(ParkingSpotType.valueOf(type));
+        parkingSpot.setParkingSpotZone(ParkingSpotZone.valueOf(zone));
         parkingSpotRepository.save(parkingSpot);
     }
 }
