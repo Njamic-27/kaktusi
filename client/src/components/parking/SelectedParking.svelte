@@ -8,6 +8,9 @@
   let displayCard = false;
   let price = 0;
 
+  let selectedHour = "00"; // Initialize with a default value
+  let selectedMinute = "00"; // Initialize with a default value
+
   // Latitude and Longitude of the location you want to reverse geocode
   const lat = spot.latitude; // Example latitude
   const lng = spot.longitude; // Example longitude
@@ -36,6 +39,11 @@
     const url = `https://www.google.com/maps?q=${lat},${lng}`;
     window.location.href = url;
   }
+
+  function handleReservation() {
+    let time = `${selectedHour}:${selectedMinute}`;
+    let id = spot.id;
+  }
 </script>
 
 <main>
@@ -46,7 +54,7 @@
       <div class="time-container">
         <span class="time-label">End Time:</span>
         <div class="time-select">
-          <select class="hour-select input-field">
+          <select class="hour-select input-field" bind:value={selectedHour}>
             <option value="00">00</option>
             <option value="01">01</option>
             <option value="02">02</option>
@@ -74,7 +82,7 @@
             <!-- Add more hour options as needed -->
           </select>
           :
-          <select class="minute-select input-field">
+          <select class="minute-select input-field" bind:value={selectedMinute}>
             <option value="00">00</option>
             <option value="15">15</option>
             <option value="30">30</option>
@@ -91,7 +99,7 @@
         >
       </div>
       {#if !spot.occupied}
-        <button class="button">Reserve Now</button>
+        <button class="button" on:click={handleReservation}>Reserve Now</button>
       {/if}
       <button class="button" on:click={navigate}>Navigate</button>
     </div>
@@ -110,12 +118,12 @@
     align-items: flex-end;
   }
 
-  .button{
+  .button {
     border: 2px solid var(--color-primary);
     padding: 5px;
     border-radius: 5px;
     margin: 5px;
-    font-family: 'Poppins';
+    font-family: "Poppins";
     font-size: large;
     background-color: var(--color-accent);
     color: white;
