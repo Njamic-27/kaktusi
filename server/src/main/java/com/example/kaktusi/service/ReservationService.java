@@ -23,8 +23,8 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public void reserveParkingSpot(ParkingSpotReservation parkingSpotReservation) {
-        Optional<ParkingSpotDto> parkingSpotOptional = parkingSpotRepository.findById(parkingSpotReservation.getId());
+    public void reserveParkingSpot(String id, Integer endH, Integer endM) {
+        Optional<ParkingSpotDto> parkingSpotOptional = parkingSpotRepository.findById(id);
         if (parkingSpotOptional.isPresent()) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("accept", MediaType.APPLICATION_JSON_VALUE);
@@ -32,18 +32,23 @@ public class ReservationService {
 
             ParkingSpotDto parkingSpot = parkingSpotOptional.get();
             if (!parkingSpot.isOccupied()) {
+                ParkingSpotReservation parkingSpotReservation = new ParkingSpotReservation();
+                parkingSpotReservation.setId(id);
+                parkingSpotReservation.setEndH(endH);
+                parkingSpotReservation.setEndM(endM);
                 parkingSpotRepository.occupySpot(parkingSpot.getId());
                 reservationRepository.save(parkingSpotReservation);
-            }
-            HttpEntity<ParkingSpotReservation> entity = new HttpEntity<>(parkingSpotReservation,headers);
-            RestTemplate restTemplate = new RestTemplate();
+                HttpEntity<ParkingSpotReservation> entity = new HttpEntity<>(parkingSpotReservation,headers);
+                RestTemplate restTemplate = new RestTemplate();
 
-            ResponseEntity<ParkingSpotReservation> responseEntity = restTemplate.exchange(
-                    apiUrl,
-                    HttpMethod.POST,
-                    entity,
-                    ParkingSpotReservation.class
-            );
+                ResponseEntity<ParkingSpotReservation> responseEntity = restTemplate.exchange(
+                        apiUrl,
+                        HttpMethod.POST,
+                        entity,
+                        ParkingSpotReservation.class
+                );
+            }
+
         }
     }
 }
