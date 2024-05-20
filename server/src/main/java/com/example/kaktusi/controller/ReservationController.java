@@ -2,6 +2,7 @@ package com.example.kaktusi.controller;
 
 import com.example.kaktusi.entity.ParkingSpotDto;
 import com.example.kaktusi.entity.ParkingSpotReservation;
+import com.example.kaktusi.repository.ReservationRepository;
 import com.example.kaktusi.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,9 +17,12 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:3000")
 public class ReservationController {
     private final ReservationService reservationService;
+    private final ReservationRepository reservationRepository;
 
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService,
+                                 ReservationRepository reservationRepository) {
         this.reservationService = reservationService;
+        this.reservationRepository = reservationRepository;
     }
 
     @PostMapping("/api/parking/reserve")
@@ -30,6 +34,7 @@ public class ReservationController {
         parkingSpotRe.setEndH(endH);
         parkingSpotRe.setEndM(endM);
         parkingSpotRe.setId(id);
+        System.out.println(parkingSpotRe.toString());
         return reservationService.reserveParkingSpot(id, endH, endM);
     }
 }
