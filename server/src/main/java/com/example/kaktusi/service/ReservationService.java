@@ -28,10 +28,6 @@ public class ReservationService {
     public boolean reserveParkingSpot(String id, Integer endH, Integer endM) {
         Optional<ParkingSpotDto> parkingSpotOptional = parkingSpotRepository.findById(id);
         if (parkingSpotOptional.isPresent()) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("Api-Key", apiKey);
-
             ParkingSpotDto parkingSpot = parkingSpotOptional.get();
             if (!parkingSpot.isOccupied()) {
                 ParkingSpotReservation parkingSpotReservation = new ParkingSpotReservation();
@@ -44,32 +40,7 @@ public class ReservationService {
                 model.setParkingSpotId(parkingSpotReservation.getId());
                 model.setEndH(parkingSpotReservation.getEndH());
                 model.setEndM(parkingSpotReservation.getEndM());
-                HttpEntity<ResModel> entity = new HttpEntity<>(model,headers);
-                RestTemplate restTemplate = new RestTemplate();
-
-                try {
-                    ResponseEntity<ParkingSpotReservation> responseEntity = restTemplate.exchange(
-                            apiUrl,
-                            HttpMethod.POST,
-                            entity,
-                            ParkingSpotReservation.class
-                    );
-
-                    // Process the response entity
-                    ParkingSpotReservation response = responseEntity.getBody();
-
-                    // Continue processing the response
-                } catch (HttpStatusCodeException e) {
-                    String responseBody = e.getResponseBodyAsString();
-                    HttpStatus statusCode = (HttpStatus) e.getStatusCode();
-
-                    // Handle the exception gracefully
-                    System.err.println("Request failed with status code: " + statusCode);
-                    System.err.println("Response body: " + responseBody);
-                    return false;
-                }
             }
-
         }
         return true;
     }
