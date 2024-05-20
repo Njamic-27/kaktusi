@@ -49,7 +49,7 @@
 </script>
 
 <main>
-  <div class="main-title">Parktus</div>
+  <div class="main-title">FindPark</div>
   {#if error}
     <div class="error">Failed to log in!</div>
   {/if}

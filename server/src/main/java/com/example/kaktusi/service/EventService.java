@@ -39,7 +39,7 @@ public class EventService {
         occupyLog.setTimeNow(LocalDateTime.now());
         occupyLogRepository.save(occupyLog);
     }
-    @Scheduled(fixedRate = 1000)
+    //@Scheduled(fixedRate = 1000)
     public void startEventProcessing() {
         String connectionString = "Endpoint=sb://cbq-hackathon.servicebus.windows.net/;SharedAccessKeyName=n;SharedAccessKey=/3u+79mnjCx4qBqPjW1P0qn1DSMNRCRLV+AEhJgp4IM=;EntityPath=team4";
         String eventHubName = "team4";

@@ -5,11 +5,9 @@
     redirect("Parking");
   };
   let a = isAdmin();
-  console.log(a);
 </script>
 
 <main>
-  <img class="logo" src="./src/public/markers/green_marker.png" alt="" />
   <button on:click={goToMap}>Find parking</button>
   <div class="image-home">
     <img
@@ -32,11 +30,6 @@
     height: 84vh;
     margin-top: 8vh;
     margin-bottom: 8vh;
-  }
-  .logo {
-    scale: 0.3;
-    position: absolute;
-    top: 0;
   }
 
   button {

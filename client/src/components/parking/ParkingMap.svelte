@@ -73,11 +73,13 @@
   onMount(async () => {
     map = L.map("map").setView([latitude, longitude], zoomLevel);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>',
-    }).addTo(map);
+    L.tileLayer(
+      "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+      {
+        
+        maxZoom: 19,
+      }
+    ).addTo(map);
 
     spots.forEach((spot) => {
       let customIcon = spot.occupied ? redIcon : greenIcon;

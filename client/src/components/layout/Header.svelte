@@ -12,15 +12,15 @@
 <header>
   <section class="header">
     <div />
-    <h1 class="title">Parktus</h1>
+    <h1 class="title">FindPark</h1>
     <button class="profile" on:click={toggleOptionsVisibility}>
       <i class="fa-regular fa-circle-user" />
     </button>
   </section>
   {#if optionsVisible}
     <aside transition:slide>
-      <button on:click={() => redirect("/")}>Option1</button>
-      <button on:click={() => redirect("/")}>Option2</button>
+      <button on:click={() => redirect("/")}>Reservations</button>
+      <button on:click={() => redirect("/")}>Profile</button>
       <button on:click={logout}>Logout</button>
     </aside>
   {/if}

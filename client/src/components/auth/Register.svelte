@@ -46,7 +46,7 @@
 </script>
 
 <main>
-  <div class="main-title">Parktus</div>
+  <div class="main-title">FindPark</div>
   <AuthForm
     on:submit={submit}
     on:swap={swap}

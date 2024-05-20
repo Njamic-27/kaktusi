@@ -149,13 +149,13 @@
     right: 5px;
     z-index: 2;
     width: 100px;
-    border: 3px solid var(--color-primary);
+    border: 3px solid var(--color-accent);
     padding: 5px;
     border-radius: 15px;
     margin: 5px;
     font-family: "Poppins";
     font-size: large;
-    background-color: var(--color-accent);
+    background-color: var(--color-primary);
     color: white;
   }
 
@@ -166,13 +166,13 @@
     z-index: 2;
     width: 100px;
 
-    border: 3px solid var(--color-primary);
+    border: 3px solid var(--color-accent);
     padding: 5px;
     border-radius: 15px;
     margin: 5px;
     font-family: "Poppins";
     font-size: large;
-    background-color: var(--color-accent);
+    background-color: var(--color-primary);
     color: white;
   }
 </style>
