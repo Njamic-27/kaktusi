@@ -142,7 +142,6 @@
             <option value="21">21</option>
             <option value="22">22</option>
             <option value="23">23</option>
-            <!-- Add more hour options as needed -->
           </select>
           :
           <select class="minute-select input-field" bind:value={selectedMinute}>
@@ -150,8 +149,6 @@
             <option value="15">15</option>
             <option value="30">30</option>
             <option value="45">45</option>
-
-            <!-- Add more minute options as needed -->
           </select>
         </div>
       </div>
@@ -266,7 +263,9 @@
     background-color: white; /* Set the background color */
     color: var(--color-primary); /* Set the text color */
     outline: none; /* Remove the default outline */
-    transition: border-color 0.2s, box-shadow 0.2s; /* Add a transition effect */
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s; /* Add a transition effect */
   }
 
   .input-field:focus {

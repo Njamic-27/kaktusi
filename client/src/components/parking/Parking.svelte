@@ -29,6 +29,7 @@
       displaySelected = false;
     }
     selectedSpot = data;
+    console.log(selectedSpot);
     displaySelected = true;
   }
 

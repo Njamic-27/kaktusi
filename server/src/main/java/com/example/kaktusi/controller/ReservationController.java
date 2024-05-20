@@ -30,6 +30,7 @@ public class ReservationController {
         parkingSpotRe.setEndH(endH);
         parkingSpotRe.setEndM(endM);
         parkingSpotRe.setId(id);
+        System.out.println(parkingSpotRe);
         return reservationService.reserveParkingSpot(id, endH, endM);
     }
 }
