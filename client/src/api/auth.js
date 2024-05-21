@@ -29,8 +29,9 @@ const register = (username, password) => {
   return result;
 };
 
-const logout = () => {
-  return request.post(urls.logout).then(extractData);
+const logout = async () => {
+  const res = await request.post(urls.logout);
+  return extractData(res);
 };
 
 export default {

@@ -48,10 +48,9 @@ const fetchStats = (id) => {
   return result;
 };
 
-const makeReservation = async (endH, endM, parkingSpotId) => {
+const makeReservation = async (endH, parkingSpotId) => {
   const result = await request.post(urls.makeReservation, {
     endH,
-    endM,
     parkingSpotId,
   });
 

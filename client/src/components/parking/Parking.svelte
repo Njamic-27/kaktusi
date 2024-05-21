@@ -29,7 +29,6 @@
       displaySelected = false;
     }
     selectedSpot = data;
-    console.log(selectedSpot);
     displaySelected = true;
   }
 
@@ -57,7 +56,6 @@
       let data = [];
 
       data = await getCoordinates(detail.address);
-      console.log(data.latitude);
       mapState = {
         latitude: data.latitude,
         longitude: data.longitude,
@@ -78,12 +76,10 @@
   }
 
   async function getCoordinates(address) {
-    // Create the URL for the geocoding request
     const geocodingUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       address
     )}`;
 
-    // Make an HTTP GET request using the Fetch API
     return fetch(geocodingUrl)
       .then((response) => {
         if (!response.ok) {

@@ -19,8 +19,7 @@
   </section>
   {#if optionsVisible}
     <aside transition:slide>
-      <button on:click={() => redirect("/")}>Reservations</button>
-      <button on:click={() => redirect("/")}>Profile</button>
+      
       <button on:click={logout}>Logout</button>
     </aside>
   {/if}

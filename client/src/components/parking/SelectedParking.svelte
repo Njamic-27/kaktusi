@@ -1,5 +1,5 @@
 <script>
-  import { fade, fly, scale, slide } from "svelte/transition";
+  import { fade, fly, slide } from "svelte/transition";
   import { createEventDispatcher, onMount } from "svelte";
   import { parkingApi } from "@/api";
   import { isAdmin } from "@/stores/auth";
@@ -10,10 +10,19 @@
   $: displayCard = false;
   let displayMessage = false;
   let price = 0;
+  let totalPrice = 0;
   let displayAdminActions = false;
+  let displayTotalPrice = false;
+  let message;
 
-  let selectedZone = spot.parkingSpotZone; // Initialize with an empty value
-  let selectedType = spot.parkingSpotType; // Initialize with an empty value
+  let currentHour = new Date().getHours();
+  let availableHours = Array.from(
+    { length: 24 - currentHour - 1 },
+    (_, i) => i + currentHour + 1
+  );
+
+  let selectedZone = spot.parkingSpotZone;
+  let selectedType = spot.parkingSpotType;
 
   if (isAdmin()) {
     displayAdminActions = true;
@@ -23,22 +32,23 @@
     selectedZone = event.target.value;
   }
 
-  // Function to handle changes in the selected type
   function handleTypeChange(event) {
     selectedType = event.target.value;
+  }
+
+  function calculateTotalPrice() {
+    totalPrice = price * (selectedHour - currentHour);
+    displayTotalPrice = true;
   }
 
   const zoneOptions = ["Zone1", "Zone2", "Zone3", "Zone4"];
   const typeOptions = ["NORMAL", "HANDICAP", "ELECTRIC"];
 
-  let selectedHour = "00"; // Initialize with a default value
-  let selectedMinute = "00"; // Initialize with a default value
+  let selectedHour = "00";
 
-  // Latitude and Longitude of the location you want to reverse geocode
-  const lat = spot.latitude; // Example latitude
-  const lng = spot.longitude; // Example longitude
+  const lat = spot.latitude;
+  const lng = spot.longitude;
 
-  // Create a Nominatim API request URL
   const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
   onMount(async () => {
     displayCard = false;
@@ -46,7 +56,6 @@
     const id = spot.id;
     price = await parkingApi.fetchPrice(id);
 
-    // Make a request to the Nominatim API
     fetch(nominatimUrl)
       .then((response) => response.json())
       .then((data) => {
@@ -80,19 +89,24 @@
   async function handleReservation() {
     displayCard = false;
     let endH = selectedHour;
-    let endM = selectedMinute;
     let parkingSpotId = spot.id;
-    let response = await parkingApi.makeReservation(endH, endM, parkingSpotId);
-    console.log(response);
+    //let response = await parkingApi.makeReservation(endH, parkingSpotId);
+    let response = false;
+    //provjera sa balance, ima li dovoljno
     if (response) {
       displayCard = false;
+      message = "Successful reservation"
       displayMessage = true;
       setTimeout(() => {
         displayMessage = false;
-        redirect("Parking");
+        redirect("Account");
       }, 2000);
     } else {
-      alert("Error");
+      message = "Failed reservation, check your balance"
+      displayMessage = true;
+      setTimeout(() => {
+        displayMessage = false;
+      }, 2000);
     }
   }
 
@@ -102,62 +116,45 @@
 
   const getStats = async () => {
     const res = await parkingApi.fetchStats(spot.id);
-    console.log(res);
   };
 </script>
 
 <main>
   {#if displayMessage}
-    <div class="success">Successful reservation</div>
+    <div class="messageCard" in:fade out:fade>{message}</div>
   {/if}
   {#if displayCard === true}
     <div class="cardContainer" in:slide={{ delay: 200 }} out:slide>
       <div class="spot-title">{address}</div>
       <p class="parking-type">Parking type: {spot.parkingSpotType}</p>
       <div class="time-container">
-        <span class="time-label">End Time:</span>
+        <span class="time-label">End Hour:</span>
         <div class="time-select">
-          <select class="hour-select input-field" bind:value={selectedHour}>
-            <option value="00">00</option>
-            <option value="01">01</option>
-            <option value="02">02</option>
-            <option value="03">03</option>
-            <option value="04">04</option>
-            <option value="05">05</option>
-            <option value="06">06</option>
-            <option value="07">07</option>
-            <option value="08">08</option>
-            <option value="09">09</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-            <option value="15">15</option>
-            <option value="16">16</option>
-            <option value="17">17</option>
-            <option value="18">18</option>
-            <option value="19">19</option>
-            <option value="20">20</option>
-            <option value="21">21</option>
-            <option value="22">22</option>
-            <option value="23">23</option>
-          </select>
-          :
-          <select class="minute-select input-field" bind:value={selectedMinute}>
-            <option value="00">00</option>
-            <option value="15">15</option>
-            <option value="30">30</option>
-            <option value="45">45</option>
+          <select
+            class="hour-select input-field"
+            bind:value={selectedHour}
+            on:change={calculateTotalPrice}
+          >
+            {#each availableHours as hour}
+              <option value={hour.toString().padStart(2, "0")}
+                >{hour.toString().padStart(2, "0")}</option
+              >
+            {/each}
           </select>
         </div>
       </div>
       <div class="price-container">
-        <span class="price-label">Price:</span>
-        <span class="highlighted-price"
-          >{price}€ in Zone {spot.parkingSpotZone.slice(-1)}</span
+        <span class="price-label"
+          >Price per hour in Zone {spot.parkingSpotZone.slice(-1)}:</span
         >
+        <span class="highlighted-price">{price}€</span>
       </div>
+      {#if displayTotalPrice}
+        <div class="price-container">
+          <span class="price-label">Total price:</span>
+          <span class="highlighted-price">{totalPrice}€</span>
+        </div>
+      {/if}
       {#if !spot.occupied}
         <button class="button" on:click={handleReservation}>Reserve Now</button>
       {/if}
@@ -207,20 +204,20 @@
     align-items: flex-end;
   }
 
-  .success {
+  .messageCard {
     position: absolute;
     font-size: larger;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    width: 300px;
-    height: 150px;
+    width: 250px;
+    height: 100px;
     background-color: var(--color-primary);
     border-radius: 15px;
-    border: 3px solid var(--color-accent);
+    padding: 20px;
     color: white;
-    z-index: 5;
+    z-index: 1;
     top: 0;
   }
 
@@ -231,46 +228,49 @@
     margin: 5px;
     font-family: "Poppins";
     font-size: large;
-    background-color: var(--color-accent);
+    background-color: var(--color-primary);
     color: white;
   }
 
   .cardContainer {
     position: relative;
     z-index: 1;
-    height: 300px; /* Set the desired fixed height */
-    width: 90%;
-    background-color: var(--color-white);
-    border-top: 5px solid var(--color-primary);
-    border-left: 5px solid var(--color-primary);
-    border-right: 5px solid var(--color-primary);
-    border-bottom: 5px solid var(--color-primary);
+    height: 350px; /* Set the desired fixed height */
+    width: 95%;
+    background-color: var(--color-accent);
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
     display: flex;
     align-items: center;
     flex-direction: column;
-    overflow-y: auto; /* Enable both mouse and touch scrolling */
+    overflow-y: auto;
+  }
+
+  .time-container {
+    width: 60%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
   }
 
   .input-field {
-    font-size: 16px; /* Adjust the font size as needed */
-    padding: 8px; /* Adjust the padding as needed */
-    border: 2px solid var(--color-primary); /* Add a border with your desired color */
-    border-radius: 5px; /* Add rounded corners */
-    width: 60px; /* Adjust the width as needed */
-    margin: 0 5px; /* Add some spacing between the fields */
-    background-color: white; /* Set the background color */
-    color: var(--color-primary); /* Set the text color */
-    outline: none; /* Remove the default outline */
+    font-size: 16px;
+    padding: 4px;
+    border: 2px solid var(--color-primary);
+    border-radius: 5px;
+    width: 100px;
+    margin: 0 5px;
+    background-color: white;
+    color: var(--color-primary);
+    outline: none;
     transition:
       border-color 0.2s,
-      box-shadow 0.2s; /* Add a transition effect */
+      box-shadow 0.2s;
   }
 
   .input-field:focus {
-    border-color: var(--color-secondary); /* Change the border color on focus */
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add a subtle box-shadow on focus */
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   }
 
   select {
@@ -286,13 +286,14 @@
 
   .spot-title {
     width: 100%;
-    height: 70px;
+    height: 80px;
     text-align: center;
-    background-color: var(--color-accent);
-    height: 50px;
-    margin: 0;
+    background-color: var(--color-primary);
     font-size: larger;
-    padding: 20px 0px;
     font-weight: 800;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
