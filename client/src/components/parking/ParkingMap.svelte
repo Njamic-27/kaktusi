@@ -42,7 +42,7 @@
 
   const dispatch = createEventDispatcher();
   let selectedMarker = null;
-  let minZoomToShowSpots = 16; // Adjust this zoom level as needed
+  let minZoomToShowSpots = 16; 
 
   let latitude = 45.815;
   let longitude = 15.9819;
@@ -60,10 +60,8 @@
     if (spots.length > 0) {
       spots.forEach((spot) => {
         if (currentZoom >= minZoomToShowSpots) {
-          // Show the spot marker
           spot.markerData.addTo(map);
         } else {
-          // Hide the spot marker
           map.removeLayer(spot.markerData);
         }
       });
@@ -76,7 +74,6 @@
     L.tileLayer(
       "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
       {
-        
         maxZoom: 19,
       }
     ).addTo(map);

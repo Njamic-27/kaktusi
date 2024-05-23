@@ -7,7 +7,6 @@
   import { onMount } from "svelte";
   import { add } from "ol/coordinate";
   $: selectedSpot = null;
-  $: displaySelected = false;
   let spots = [];
   let loaded = false;
   let selected = [];
@@ -26,10 +25,8 @@
   function handleParkingSelect({ detail: data }) {
     if (selectedSpot) {
       selectedSpot = null;
-      displaySelected = false;
     }
     selectedSpot = data;
-    displaySelected = true;
   }
 
   const refreshData = async () => {
@@ -43,7 +40,7 @@
 
   const applyFilter = async ({ detail }) => {
     let selected = detail.selected;
-    showCategorySection = !showCategorySection;
+    toggleFilterContainerVisibility();
     loaded = false;
     if (selected.length > 0) {
       spotsForDisplay = spots.filter((spot) =>
@@ -67,7 +64,7 @@
     }, 500);
   };
 
-  function displayCategorySelect() {
+  function toggleFilterContainerVisibility() {
     showCategorySection = !showCategorySection;
   }
 
@@ -110,10 +107,16 @@
     <div class="">Loading</div>
   {:else}
     {#if showCategorySection}
-      <Filter on:selectCategories={applyFilter} bind:selected />
+      <Filter
+        on:selectCategories={applyFilter}
+        on:clickOutside={toggleFilterContainerVisibility}
+        bind:selected
+      />
     {/if}
     <button class="button" on:click={refreshData}>Refresh</button>
-    <button class="filter" on:click={displayCategorySelect}>Filter</button>
+    <button class="filter" on:click={toggleFilterContainerVisibility}
+      >Filter</button
+    >
     <ParkingMap
       spots={spotsForDisplay}
       currentState={mapState}

@@ -40,11 +40,13 @@
 </main>
 
 <style>
+ 
   .container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
+
   }
 
   .grid-container {

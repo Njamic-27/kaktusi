@@ -1,11 +1,14 @@
 <script>
-  import { fade, fly, slide } from "svelte/transition";
+  import { fade, scale, slide } from "svelte/transition";
   import { createEventDispatcher, onMount } from "svelte";
-  import { parkingApi } from "@/api";
+  import { parkingApi, reservationApi } from "@/api";
   import { isAdmin } from "@/stores/auth";
   import { redirect } from "@/utils/router/routing";
+  import OptionButton from "../common/OptionButton.svelte";
+  import MessageCard from "../common/MessageCard.svelte";
 
   export let spot;
+
   let address = "";
   $: displayCard = false;
   let displayMessage = false;
@@ -15,43 +18,28 @@
   let displayTotalPrice = false;
   let message;
 
+  let selected = [false, false, false];
+
+  const zoneOptions = ["Zone1", "Zone2", "Zone3", "Zone4"];
+  const typeOptions = ["NORMAL", "HANDICAP", "ELECTRIC"];
+
   let currentHour = new Date().getHours();
   let availableHours = Array.from(
     { length: 24 - currentHour - 1 },
     (_, i) => i + currentHour + 1
   );
+  let selectedHour;
 
+  let dispatch = createEventDispatcher();
   let selectedZone = spot.parkingSpotZone;
   let selectedType = spot.parkingSpotType;
 
-  if (isAdmin()) {
-    displayAdminActions = true;
-  }
-
-  function handleZoneChange(event) {
-    selectedZone = event.target.value;
-  }
-
-  function handleTypeChange(event) {
-    selectedType = event.target.value;
-  }
-
-  function calculateTotalPrice() {
-    totalPrice = price * (selectedHour - currentHour);
-    displayTotalPrice = true;
-  }
-
-  const zoneOptions = ["Zone1", "Zone2", "Zone3", "Zone4"];
-  const typeOptions = ["NORMAL", "HANDICAP", "ELECTRIC"];
-
-  let selectedHour = "00";
-
-  const lat = spot.latitude;
-  const lng = spot.longitude;
-
-  const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+  let lat = spot.latitude;
+  let lng = spot.longitude;
   onMount(async () => {
     displayCard = false;
+
+    const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
 
     const id = spot.id;
     price = await parkingApi.fetchPrice(id);
@@ -69,7 +57,22 @@
       });
   });
 
-  let dispatch = createEventDispatcher();
+  if (isAdmin()) {
+    displayAdminActions = true;
+  }
+
+  function handleZoneChange(event) {
+    selectedZone = event.target.value;
+  }
+
+  function handleTypeChange(event) {
+    selectedType = event.target.value;
+  }
+
+  function calculateTotalPrice() {
+    totalPrice = (price * selectedHour).toFixed(2);
+    displayTotalPrice = true;
+  }
 
   function navigate() {
     const url = `https://www.google.com/maps?q=${lat},${lng}`;
@@ -88,21 +91,26 @@
 
   async function handleReservation() {
     displayCard = false;
-    let endH = selectedHour;
+    let reservationTime = new Date(Date.now() + selectedHour * 60 * 60 * 1000);
+    console.log(reservationTime);
     let parkingSpotId = spot.id;
-    //let response = await parkingApi.makeReservation(endH, parkingSpotId);
-    let response = false;
+
+    //let response = await reservationApi.makeReservation(reservationTime, parkingSpotId);
+
     //provjera sa balance, ima li dovoljno
+    //konkurentnost na backendu, što ako dvojica rezerviraju u isto vrijeme
+
+    let response = false;
     if (response) {
       displayCard = false;
-      message = "Successful reservation"
+      message = "Successful reservation";
       displayMessage = true;
       setTimeout(() => {
         displayMessage = false;
         redirect("Account");
       }, 2000);
     } else {
-      message = "Failed reservation, check your balance"
+      message = "Failed reservation, check your balance";
       displayMessage = true;
       setTimeout(() => {
         displayMessage = false;
@@ -114,51 +122,80 @@
     dispatch("refresh");
   };
 
-  const getStats = async () => {
+  /* const getStats = async () => {
     const res = await parkingApi.fetchStats(spot.id);
-  };
+  }; */
+
+  function handleHourSelection({ detail: hour }) {
+    selectedHour = hour;
+    calculateTotalPrice();
+    toggleClickedButton(hour);
+  }
+
+  function toggleClickedButton(value) {
+    selected = [false, false, false];
+    selected[value - 1] = true;
+  }
 </script>
 
+{#if displayMessage}
+  <MessageCard {message}></MessageCard>
+{/if}
+
 <main>
-  {#if displayMessage}
-    <div class="messageCard" in:fade out:fade>{message}</div>
-  {/if}
   {#if displayCard === true}
     <div class="cardContainer" in:slide={{ delay: 200 }} out:slide>
       <div class="spot-title">{address}</div>
       <p class="parking-type">Parking type: {spot.parkingSpotType}</p>
-      <div class="time-container">
-        <span class="time-label">End Hour:</span>
-        <div class="time-select">
-          <select
-            class="hour-select input-field"
-            bind:value={selectedHour}
-            on:change={calculateTotalPrice}
-          >
-            {#each availableHours as hour}
-              <option value={hour.toString().padStart(2, "0")}
-                >{hour.toString().padStart(2, "0")}</option
-              >
-            {/each}
-          </select>
-        </div>
-      </div>
-      <div class="price-container">
-        <span class="price-label"
-          >Price per hour in Zone {spot.parkingSpotZone.slice(-1)}:</span
-        >
-        <span class="highlighted-price">{price}€</span>
-      </div>
-      {#if displayTotalPrice}
-        <div class="price-container">
-          <span class="price-label">Total price:</span>
-          <span class="highlighted-price">{totalPrice}€</span>
-        </div>
-      {/if}
       {#if !spot.occupied}
+        <div class="time-container">
+          <span class="time-label">Reserve for:</span>
+          <div class="timeSelectGrid">
+            <div class="option">
+              <OptionButton
+                value="1"
+                selected={selected[0]}
+                on:hourSelection={handleHourSelection}
+              ></OptionButton>
+            </div>
+            <div class="option">
+              <OptionButton
+                value="2"
+                selected={selected[1]}
+                on:hourSelection={handleHourSelection}
+              ></OptionButton>
+            </div>
+            <div class="option">
+              <OptionButton
+                value="3"
+                selected={selected[2]}
+                on:hourSelection={handleHourSelection}
+              ></OptionButton>
+            </div>
+          </div>
+        </div>
+        <div class="price-container">
+          <span class="price-label"
+            >Price per hour in Zone {spot.parkingSpotZone.slice(-1)}:</span
+          >
+          <span class="highlighted-price">{price}€</span>
+        </div>
+        {#if displayTotalPrice}
+          <div class="price-container" in:scale>
+            <span class="price-label">Total price:</span>
+            <span class="highlighted-price">{totalPrice}€</span>
+          </div>
+        {/if}
+
         <button class="button" on:click={handleReservation}>Reserve Now</button>
+
+        <button class="button" on:click={navigate}>Navigate</button>
+      {:else}
+        <div class="takenSpotContainer">
+          <div class="message">This spot is occupied for next:</div>
+          <div class="timeOccupied">26 min</div>
+        </div>
       {/if}
-      <button class="button" on:click={navigate}>Navigate</button>
       {#if displayAdminActions}
         <label for="zone">Parking Zone:</label>
         <select
@@ -182,9 +219,9 @@
           {/each}
         </select>
         <button class="button" on:click={saveChangesAdmin}>Save changes</button>
-        <button class="button" on:click={getStats}
+        <!-- <button class="button" on:click={getStats}
           ><i class="fa-solid fa-chart-simple" /></button
-        >
+        > -->
         <button class="button" on:click={deleteSpot}>Delete parking spot</button
         >
       {/if}
@@ -200,25 +237,43 @@
     width: 100%;
     height: 35%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: flex-end;
   }
 
-  .messageCard {
-    position: absolute;
-    font-size: larger;
+  .takenSpotContainer {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3rem;
+  }
+
+  .timeOccupied {
+    height: 40%;
+    font-size: 3rem;
+    font-weight: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .option {
+    width: 100%;
     text-align: center;
-    width: 250px;
-    height: 100px;
-    background-color: var(--color-primary);
-    border-radius: 15px;
-    padding: 20px;
-    color: white;
-    z-index: 1;
-    top: 0;
+  }
+
+  .price-container {
+    margin-top: 5px;
+  }
+
+  .timeSelectGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    width: 100%;
   }
 
   .button {
@@ -235,7 +290,7 @@
   .cardContainer {
     position: relative;
     z-index: 1;
-    height: 350px; /* Set the desired fixed height */
+    height: 400px; /* Set the desired fixed height */
     width: 95%;
     background-color: var(--color-accent);
     border-top-right-radius: 20px;
@@ -247,30 +302,11 @@
   }
 
   .time-container {
-    width: 60%;
+    width: 97%;
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
-  }
-
-  .input-field {
-    font-size: 16px;
-    padding: 4px;
-    border: 2px solid var(--color-primary);
-    border-radius: 5px;
-    width: 100px;
-    margin: 0 5px;
-    background-color: white;
-    color: var(--color-primary);
-    outline: none;
-    transition:
-      border-color 0.2s,
-      box-shadow 0.2s;
-  }
-
-  .input-field:focus {
-    border-color: var(--color-secondary);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   }
 
   select {

@@ -3,35 +3,81 @@
   import Wallet from "./Wallet.svelte";
   import Reservations from "./Reservations.svelte";
   import { onMount } from "svelte";
-  import account from "@/api/account";
+  import MessageCard from "../common/MessageCard.svelte";
   import { getUserId, user } from "@/stores/auth";
+  import { accountApi, reservationApi } from "@/api";
 
   let loaded = true;
   let balance = 100; //dohvati
   let userId = getUserId();
-  let reservations = [1, 2, 3, 4, 5];
+  let reservations = [1, 2, 3, 4, 5, 6, 7];
+  let displayMessage = false;
+  let message;
 
   onMount(async () => {
-    //balance = account.fetchBalance(userId)
-    //reservations = account.fetchReservations(userId)
-    balance = 100;
+    //balance = accountApi.fetchBalance(userId)
+    //reservations = reservationApi.fetchReservations(userId)
+    balance = 100; //kasnije maknuti
   });
 
-  function addBalance({ detail: newBalance }) {
+  async function addBalance({ detail: newBalance }) {
     loaded = false;
     balance = balance + newBalance;
-    //account.updateBalance(userId, balance)
-    loaded = true;
-    //redirect("Account");
+    try {
+      //let res = await accountApi.updateBalance(userId, balance);
+      let res = true;
+      if (res) {
+        redirect("Account");
+      } else {
+        console.error("Error: Unable to update balance");
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    } finally {
+      loaded = true;
+    }
+  }
+
+  async function handleReservationExtension({
+    detail: { reservation, selectedHour },
+  }) {
+    loaded = false;
+    try {
+      let res = await reservationApi.extendReservation(
+        reservation,
+        selectedHour
+      );
+      if (res) {
+        message = "Extended reservation successfully";
+        displayMessage = true;
+        setTimeout(() => {
+          displayMessage = false;
+          redirect("Account");
+        }, 2000);
+      } else {
+        console.error("Error: Unable to extend reservation");
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    } finally {
+      loaded = true;
+    }
   }
 </script>
+
+{#if displayMessage}
+  <MessageCard {message}></MessageCard>
+{/if}
 
 <main>
   {#if !loaded}
     <div class="loading">Loading</div>
   {:else}
     <Wallet {balance} on:addBalance={addBalance}></Wallet>
-    <Reservations {reservations}></Reservations>
+    <Reservations
+      {reservations}
+      on:reservationExtension={handleReservationExtension}
+    ></Reservations>
   {/if}
 </main>
 

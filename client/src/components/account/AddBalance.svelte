@@ -16,7 +16,7 @@
   }
 
   function addBalance() {
-    dispatch("addBalance", balance)
+    dispatch("addBalance", balance);
   }
 </script>
 
@@ -45,7 +45,7 @@
     top: 0;
     height: 100vh;
     width: 100vw;
-    z-index: 1;
+    z-index: 2;
   }
   main {
     position: absolute;
@@ -57,7 +57,7 @@
     height: 30vh;
     background-color: var(--color-accent);
     border-radius: 15px;
-    z-index: 2;
+    z-index: 3;
   }
 
   .balance {

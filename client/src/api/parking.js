@@ -19,7 +19,7 @@ const urls = {
     return `${this.root}/delete/${id}`;
   },
   get makeReservation() {
-    return this.root + "/reserve";
+    return this.root + "/makeReservation";
   },
   get insert() {
     return this.root + "/insert";

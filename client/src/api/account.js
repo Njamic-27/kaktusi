@@ -9,9 +9,6 @@ const urls = {
   updateBalance(id) {
     return `${this.root}/update/${id}`;
   },
-  fetchReservations(id) {
-    return this.root + `/reservations/${id}`;
-  },
 };
 
 const fetchBalance = async (id) => {
@@ -19,20 +16,14 @@ const fetchBalance = async (id) => {
   return result;
 };
 
-const updateBalance = (id, balance) => {
-  const result = request
+const updateBalance = async (id, balance) => {
+  const result = await request
     .put(urls.updateBalance(id), { balance })
     .then(extractData);
-  return result;
-};
-
-const fetchReservations = async (id) => {
-  const result = await request.get(urls.fetchReservations).then(extractData);
   return result;
 };
 
 export default {
   fetchBalance,
   updateBalance,
-  fetchReservations,
 };

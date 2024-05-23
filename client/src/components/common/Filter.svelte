@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte";
-  import { fade, slide } from "svelte/transition";
+  import { fade, fly, slide } from "svelte/transition";
   import CategoryGrid from "./CategoryGridView.svelte";
 
   let categories;
@@ -22,6 +22,10 @@
   const applyFilter = () => {
     dispatch("selectCategories", { selected, address });
   };
+
+  function reactToClickOutside() {
+    dispatch("clickOutside");
+  }
 </script>
 
 <main>
@@ -39,10 +43,26 @@
       />
       <button on:click={applyFilter} in:fade={{ delay: 100 }}>Confirm</button>
     </div>
+
+    <div
+      class="clickableAround"
+      on:click={reactToClickOutside}
+      on:keydown={reactToClickOutside}
+      in:fly
+      out:fly
+    ></div>
   </div>
 </main>
 
 <style>
+  .clickableAround {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 4;
+  }
   .container {
     position: fixed;
     height: 100vh;
@@ -63,11 +83,12 @@
   }
 
   .category-container {
+    position: relative;
     margin-top: 8vh;
-    height: 84vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 5;
   }
 
   .title {
