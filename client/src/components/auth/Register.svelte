@@ -7,6 +7,7 @@
   import AuthForm from "./AuthForm.svelte";
 
   const dispatch = createEventDispatcher();
+  let error = false;
 
   let inputs = {
     username: {
@@ -38,6 +39,8 @@
       if (user) {
         authStore.user.set(user);
         redirect("Home");
+      } else {
+        error = !error;
       }
     } catch (err) {
       alert(err.response.data.message);
@@ -47,6 +50,9 @@
 
 <main>
   <div class="main-title">FindPark</div>
+  {#if error}
+    <div class="error">Failed to register!</div>
+  {/if}
   <AuthForm
     on:submit={submit}
     on:swap={swap}
@@ -68,6 +74,15 @@
   main {
     position: relative;
     overflow-y: hidden;
+  }
+
+  .error {
+    color: red;
+    position: absolute;
+    top: 75%;
+    width: 100%;
+    height: 100%;
+    text-align: center;
   }
 
   .image-home {

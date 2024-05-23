@@ -43,10 +43,11 @@
   }) {
     loaded = false;
     try {
-      let res = await reservationApi.extendReservation(
+      /* let res = await reservationApi.extendReservation(
         reservation,
         selectedHour
-      );
+      ); */
+      let res = true;
       if (res) {
         message = "Extended reservation successfully";
         displayMessage = true;
