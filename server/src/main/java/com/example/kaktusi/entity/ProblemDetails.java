@@ -13,7 +13,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(of = "id", callSuper = false)
 public class ProblemDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

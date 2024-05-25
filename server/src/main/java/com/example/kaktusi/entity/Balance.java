@@ -3,28 +3,19 @@ package com.example.kaktusi.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-
-import java.sql.Time;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "parking_spot_reservation")
+@Table(name = "balance")
 @Getter
 @Setter
-public class ParkingSpotReservation {
+public class Balance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long resId;
-
+    private Long id;
     @Column
-    private String id;
+    Integer balance;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Column
-    LocalDateTime endTime;
-
 }
