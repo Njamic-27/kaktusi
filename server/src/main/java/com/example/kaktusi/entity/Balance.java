@@ -13,7 +13,7 @@ public class Balance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    Integer balance;
+    Double balance;
 
     @OneToOne
     @JoinColumn(name = "user_id")

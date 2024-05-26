@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
             usersModel.setPassword(password);
             usersModel.setRole(UserRole.USER);
             balance.setUser(usersModel);
-            balance.setBalance(0);
+            balance.setBalance((double) 0);
             userRepository.save(usersModel);
             balanceRepository.save(balance);
             return usersModel;

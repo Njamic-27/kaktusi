@@ -42,7 +42,7 @@ public class ReservationService {
                 Optional<User> optionalUser = this.userRepository.findById(userId);
                 if (optionalUser.isPresent()) {
                     Balance balance = this.balanceRepository.findByUserId(userId);
-                    balance.setBalance(balance.getBalance()-1);
+                    balance.setBalance(balance.getBalance()-parkingSpot.getParkingSpotZone().getPrice()*time);
                     balanceRepository.save(balance);
                     User user = optionalUser.get();
                     parkingSpotReservation.setUser(user);
