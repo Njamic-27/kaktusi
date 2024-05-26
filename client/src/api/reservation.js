@@ -35,7 +35,7 @@ const fetchUserReservations = async (id) => {
 
 const extendReservation = async (resId, time) => {
   const result = await request
-    .put(urls.extendReservation, { resId, time })
+    .put(urls.extendReservation, { time })
     .then(extractData);
   return result;
 };

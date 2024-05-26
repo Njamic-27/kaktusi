@@ -44,7 +44,7 @@
     const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
 
     const id = spot.id;
-    price = await parkingApi.fetchPrice(id);
+    price = spot.parkingSpotZone.price
 
     fetch(nominatimUrl)
       .then((response) => response.json())
@@ -180,7 +180,7 @@
           </div>
           <div class="price-container">
             <span class="price-label"
-              >Price per hour in Zone {spot.parkingSpotZone.slice(-1)}:</span
+              >Price per hour in Zone {spot.parkingSpotZone.id + 1}:</span
             >
             <span class="highlighted-price">{price}€</span>
           </div>
