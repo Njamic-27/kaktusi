@@ -30,15 +30,15 @@ public class ParkingSpotController{
     public void addParkingSpot(@RequestBody Map<String, String> body) {
         Double latitude = Double.valueOf(body.get("latitude"));
         Double longitude = Double.valueOf(body.get("longitude"));
-        ParkingSpotZone parkingSpotZone = ParkingSpotZone.valueOf(body.get("parkingSpotZone"));
+        Long zoneId = Long.parseLong(body.get("zone"));
         ParkingSpotType parkingSpotType = ParkingSpotType.valueOf(body.get("parkingSpotType"));
-        parkingSpotService.addParkingSpot(latitude, longitude, parkingSpotZone, parkingSpotType);
+        parkingSpotService.addParkingSpot(latitude, longitude, zoneId, parkingSpotType);
     }
 
     @PutMapping("/update/{id}")
     public void updateParkingSpot(@PathVariable String id, @RequestBody Map<String, String> body) {
         String type = body.get("type");
-        String zone = body.get("zone");
+        Long zone = Long.parseLong(body.get("zone"));
         parkingSpotService.updateParkingSpot(id, type, zone);
     }
 

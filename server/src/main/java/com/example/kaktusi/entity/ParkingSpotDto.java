@@ -22,7 +22,8 @@ public class ParkingSpotDto {
     private Double latitude;
     @Column
     private Double longitude;
-    @Column
+    @ManyToOne
+    @JoinColumn(name = "parking_spot_zoneId")
     private ParkingSpotZone parkingSpotZone;
     @Column
     private boolean occupied;

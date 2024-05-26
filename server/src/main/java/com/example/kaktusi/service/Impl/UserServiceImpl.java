@@ -34,8 +34,9 @@ public class UserServiceImpl implements UserService {
             usersModel.setRole(UserRole.USER);
             balance.setUser(usersModel);
             balance.setBalance(0);
+            userRepository.save(usersModel);
             balanceRepository.save(balance);
-            return userRepository.save(usersModel);
+            return usersModel;
         }
     }
 

@@ -5,6 +5,7 @@ import com.example.kaktusi.entity.ParkingSpotReservation;
 import com.example.kaktusi.entity.ParkingSpotType;
 import com.example.kaktusi.entity.ParkingSpotZone;
 import com.example.kaktusi.repository.ParkingSpotRepository;
+import com.example.kaktusi.repository.ParkingSpotZoneRepository;
 import com.example.kaktusi.repository.ReservationRepository;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 public class ParkingSpotService {
@@ -23,10 +23,12 @@ public class ParkingSpotService {
     private final String apiKey = "f45e6be1-863f-4964-bdd4-bbdd6480ed21";
     private final ParkingSpotRepository parkingSpotRepository;
     private final ReservationRepository reservationRepository;
+    private final ParkingSpotZoneRepository parkingSpotZoneRepository;
 
-    public ParkingSpotService(ParkingSpotRepository parkingSpotRepository, ReservationRepository reservationRepository) {
+    public ParkingSpotService(ParkingSpotRepository parkingSpotRepository, ReservationRepository reservationRepository, ParkingSpotZoneRepository parkingSpotZoneRepository) {
         this.parkingSpotRepository = parkingSpotRepository;
         this.reservationRepository = reservationRepository;
+        this.parkingSpotZoneRepository = parkingSpotZoneRepository;
     }
 
     public List<ParkingSpotDto> getAllParkingSpotsDatabase2() {
@@ -104,7 +106,7 @@ public class ParkingSpotService {
         parkingSpotRepository.deleteById(id);
     }
 
-    public void addParkingSpot(Double latitude, Double longitude, ParkingSpotZone parkingSpotZone, ParkingSpotType parkingSpotType) {
+    public void addParkingSpot(Double latitude, Double longitude, Long parkingSpotZoneId, ParkingSpotType parkingSpotType) {
         ParkingSpotDto parkingSpotDto = new ParkingSpotDto();
 
         String characters = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -143,6 +145,7 @@ public class ParkingSpotService {
         parkingSpotDto.setId(returning);
         parkingSpotDto.setLatitude(latitude);
         parkingSpotDto.setLongitude(longitude);
+        ParkingSpotZone parkingSpotZone = (ParkingSpotZone) parkingSpotZoneRepository.findById(parkingSpotZoneId).orElseThrow();
         parkingSpotDto.setParkingSpotZone(parkingSpotZone);
         parkingSpotDto.setParkingSpotType(parkingSpotType);
         parkingSpotRepository.save(parkingSpotDto);
@@ -155,32 +158,14 @@ public class ParkingSpotService {
     }
     public Double getPrice(String id) {
         ParkingSpotDto parkingSpot = parkingSpotRepository.findById(id).orElseThrow();
-        double filledPercentage = getFilledPercentage();
-        double multiplier = 1.0;
-        if (filledPercentage >= 0.9) {
-            multiplier =  2.0;
-        } else if (filledPercentage >= 0.8) {
-            multiplier = 1.5;
-        } else if (filledPercentage <=0.2) {
-            multiplier = 0.8;
-        }
-        switch (parkingSpot.getParkingSpotZone()) {
-            case Zone1:
-                return 1.6 * multiplier;
-            case Zone2:
-                return 0.7 * multiplier;
-            case Zone3:
-                return 0.3 * multiplier;
-            case Zone4:
-                return 1.3 *  multiplier;
-        }
-        return null;
+        return parkingSpot.getParkingSpotZone().getPrice();
     }
 
-    public void updateParkingSpot(String id,String type, String zone) {
+    public void updateParkingSpot(String id,String type, Long zoneId) {
+        ParkingSpotZone zone = (ParkingSpotZone) parkingSpotZoneRepository.findById(zoneId).orElseThrow();
         ParkingSpotDto parkingSpot = parkingSpotRepository.findById(id).orElseThrow();
         parkingSpot.setParkingSpotType(ParkingSpotType.valueOf(type));
-        parkingSpot.setParkingSpotZone(ParkingSpotZone.valueOf(zone));
+        parkingSpot.setParkingSpotZone(zone);
         parkingSpotRepository.save(parkingSpot);
     }
 }
