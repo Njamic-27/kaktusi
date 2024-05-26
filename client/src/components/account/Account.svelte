@@ -8,16 +8,15 @@
   import { accountApi, reservationApi } from "@/api";
 
   let loaded = true;
-  let balance = 100; //dohvati
+  let balance; //dohvati
   let userId = getUserId();
   let reservations = [];
   let displayMessage = false;
   let message;
 
   onMount(async () => {
-    //balance = accountApi.fetchBalance(userId)
+    balance = await accountApi.fetchBalance(userId)
     reservations = await reservationApi.fetchUserReservations(userId)
-    balance = 100; //kasnije maknuti
   });
 
   async function addBalance({ detail: newBalance }) {

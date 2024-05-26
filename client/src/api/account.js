@@ -2,9 +2,9 @@ import { extractData } from "./helpers";
 import request from "./request";
 
 const urls = {
-  root: "/account",
+  root: "/balance",
   fetchBalance(id) {
-    return `${this.root}/balance/${id}`;
+    return `${this.root}/${id}`;
   },
   updateBalance(id) {
     return `${this.root}/update/${id}`;

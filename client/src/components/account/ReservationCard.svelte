@@ -9,9 +9,14 @@
   let dispatch = createEventDispatcher();
   let startTime = 3;
   let address = "Gundulićeva 18";
-  console.log(reservation);
-  //let currentHour = new Date().getHours();
-  //let currentMinute = new Date().getMinutes()
+
+  let endTime = new Date(reservation.endTime);
+  let currentTime = new Date();
+
+  const differenceInMilliseconds = endTime - currentTime;
+
+  const differenceInMinutes = Math.floor(differenceInMilliseconds / 1000 / 60);
+
   let selectedHour;
   let infoText = "Expires in";
   let infoTime = "20min";
@@ -48,7 +53,7 @@
   >
     <div class="reservationInfo">
       <span>Address: {address}</span>
-      <span>{infoText}: {infoTime}</span>
+      <span>{infoText}: {differenceInMinutes} minutes</span>
     </div>
     {#if showExtraOptions}
       <div class="extraOptions" in:slide out:slide>
@@ -102,7 +107,7 @@
     z-index: 1;
   }
 
-  .price{
+  .price {
     font-size: large;
     margin-bottom: 5px;
   }

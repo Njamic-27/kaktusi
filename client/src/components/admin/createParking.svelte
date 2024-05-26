@@ -4,14 +4,18 @@
   let longitude = "";
   let latitude = "";
   let parkingSpotZone = "Zone1"; // Set the default value to Zone1
-  let parkingSpotType = "normal"
+  let parkingSpotType = "normal";
 
-  const parkingZones = ["Zone1", "Zone2", "Zone3", "Zone4"];
+  const parkingZones = ["1", "2", "3", "4"];
   const parkingTypes = ["normal", "electric", "handicap"];
 
-
   async function handleSubmit() {
-    await parkingApi.insert(longitude, latitude, parkingSpotZone, parkingSpotType);
+    await parkingApi.insert(
+      longitude,
+      latitude,
+      parkingSpotZone - 1,
+      parkingSpotType
+    );
   }
 </script>
 
@@ -26,7 +30,7 @@
     <label for="parkingSpotZone">Parking Spot Zone:</label>
     <select id="parkingSpotZone" bind:value={parkingSpotZone}>
       {#each parkingZones as zone (zone)}
-        <option value={zone}>{zone}</option>
+        <option value={zone}>Zone {zone}</option>
       {/each}
     </select>
 
