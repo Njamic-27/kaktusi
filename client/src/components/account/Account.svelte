@@ -10,13 +10,13 @@
   let loaded = true;
   let balance = 100; //dohvati
   let userId = getUserId();
-  let reservations = [1, 2, 3, 4, 5, 6, 7];
+  let reservations = [];
   let displayMessage = false;
   let message;
 
   onMount(async () => {
     //balance = accountApi.fetchBalance(userId)
-    //reservations = reservationApi.fetchReservations(userId)
+    reservations = await reservationApi.fetchUserReservations(userId)
     balance = 100; //kasnije maknuti
   });
 

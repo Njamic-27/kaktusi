@@ -25,10 +25,11 @@ const makeReservation = async (time, parkingSpotId, userId) => {
   return extractData(result);
 };
 
-const fetchReservations = async (id) => {
+const fetchUserReservations = async (id) => {
   const result = await request
-    .get(urls.fetchUserReservations)
+    .get(urls.fetchUserReservations(id))
     .then(extractData);
+
   return result;
 };
 
@@ -41,6 +42,6 @@ const extendReservation = async (resId, time) => {
 
 export default {
   makeReservation,
-  fetchReservations,
+  fetchUserReservations,
   extendReservation,
 };

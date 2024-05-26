@@ -9,6 +9,7 @@
   let dispatch = createEventDispatcher();
   let startTime = 3;
   let address = "Gundulićeva 18";
+  console.log(reservation);
   //let currentHour = new Date().getHours();
   //let currentMinute = new Date().getMinutes()
   let selectedHour;

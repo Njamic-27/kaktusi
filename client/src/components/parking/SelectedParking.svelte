@@ -18,11 +18,11 @@
   let displayAdminActions = false;
   let displayTotalPrice = false;
   let message;
-  let userId = authStore.getUserId()
+  let userId = authStore.getUserId();
 
   let selected = [false, false, false];
 
-  const zoneOptions = ["Zone1", "Zone2", "Zone3", "Zone4"];
+  const zoneOptions = ["1", "2", "3", "4"];
   const typeOptions = ["NORMAL", "HANDICAP", "ELECTRIC"];
 
   let currentHour = new Date().getHours();
@@ -82,7 +82,8 @@
   }
 
   const saveChangesAdmin = async () => {
-    await parkingApi.update(spot.id, selectedZone, selectedType);
+    console.log(selectedZone - 1);
+    await parkingApi.update(spot.id, selectedZone - 1, selectedType);
     dispatchRefresh();
   };
 
@@ -97,7 +98,11 @@
     console.log(selectedHour);
     let parkingSpotId = spot.id;
 
-    let response = await reservationApi.makeReservation(selectedHour, parkingSpotId, userId);
+    let response = await reservationApi.makeReservation(
+      selectedHour,
+      parkingSpotId,
+      userId
+    );
 
     //provjera sa balance, ima li dovoljno
     //konkurentnost na backendu, što ako dvojica rezerviraju u isto vrijeme
@@ -206,7 +211,7 @@
           on:change={handleZoneChange}
         >
           {#each zoneOptions as zone (zone)}
-            <option value={zone}>{zone}</option>
+            <option value={zone}>Zone {zone}</option>
           {/each}
         </select>
 

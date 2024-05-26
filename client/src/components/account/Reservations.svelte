@@ -1,7 +1,7 @@
 <script>
   import ReservationCard from "./ReservationCard.svelte";
   import { createEventDispatcher } from "svelte";
-  export let reservations = []; // Ensure you have a default value
+  export let reservations = [];
   let dispatch = createEventDispatcher();
 
   function handleReservationExtension({ detail: data }) {
