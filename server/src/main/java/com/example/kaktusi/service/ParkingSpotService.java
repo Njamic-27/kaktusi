@@ -37,11 +37,14 @@ public class ParkingSpotService {
         LocalDateTime now = LocalDateTime.now();
 
         for (ParkingSpotDto parkingSpot : parkingSpots) {
-            List<ParkingSpotReservation> reservations = reservationRepository.findAllByParkingSpotId(parkingSpot.getId());
+            List<ParkingSpotReservation> reservations = reservationRepository.findAllByParkingSpotId(parkingSpot.getId())
+                    .stream().filter(reservation -> reservation.getEndTime() != null)
+                    .toList();
+
             boolean occupied = false;
 
             for (ParkingSpotReservation reservation : reservations) {
-                if (reservation.getEndTime().isAfter(now)) {
+                if (reservation.getEndTime() != null && reservation.getEndTime().isAfter(now)) {
                     occupied = true;
                     break;
                 }

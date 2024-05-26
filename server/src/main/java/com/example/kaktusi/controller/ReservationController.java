@@ -27,9 +27,9 @@ public class ReservationController {
     public boolean reserveParkingSpot(@RequestBody Map<String, String> body) {
         String parkingSpotId = body.get("parkingSpotId");
         Long userId = Long.parseLong(body.get("userId"));
-        LocalDateTime endTime = LocalDateTime.parse(body.get("time"));
+        int time = Integer.parseInt(body.get("time"));
 
-        return reservationService.reserveParkingSpot(parkingSpotId, endTime, userId);
+        return reservationService.reserveParkingSpot(parkingSpotId, time, userId);
     }
     @GetMapping("/api/parking/reservations/{userId}")
     public List<ParkingSpotReservation> getCurrentReservations(@PathVariable Long userId) {

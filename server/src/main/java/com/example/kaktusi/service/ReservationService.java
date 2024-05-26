@@ -24,8 +24,9 @@ public class ReservationService {
         this.userRepository = userRepository;
     }
 
-    public boolean reserveParkingSpot(String parkingSpotId, LocalDateTime endTime, Long userId) {
+    public boolean reserveParkingSpot(String parkingSpotId, int time, Long userId) {
         Optional<ParkingSpotDto> parkingSpotOptional = parkingSpotRepository.findById(parkingSpotId);
+        LocalDateTime endTime = LocalDateTime.now().plusHours(time);
         if (parkingSpotOptional.isPresent()) {
             ParkingSpotDto parkingSpot = parkingSpotOptional.get();
             if (!parkingSpot.isOccupied()) {
