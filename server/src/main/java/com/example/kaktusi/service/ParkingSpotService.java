@@ -41,7 +41,7 @@ public class ParkingSpotService {
             boolean occupied = false;
 
             for (ParkingSpotReservation reservation : reservations) {
-                if (reservation.getEndTime().isAfter(now)) {
+                if (reservation.getEndTime() != null && reservation.getEndTime().isAfter(now)) {
                     occupied = true;
                     break;
                 }

@@ -4,7 +4,7 @@ import request from "./request";
 const urls = {
   root: "/reservations",
   get makeReservation() {
-    return this.root + "/makeReservation";
+    return this.root + "/make";
   },
   fetchUserReservations(id) {
     return this.root + `/user/${id}`;
@@ -14,10 +14,12 @@ const urls = {
   },
 };
 
-const makeReservation = async (endH, parkingSpotId) => {
+const makeReservation = async (time, parkingSpotId, userId) => {
+  console.log(time, parkingSpotId, userId);
   const result = await request.post(urls.makeReservation, {
-    endH,
+    time,
     parkingSpotId,
+    userId,
   });
 
   return extractData(result);

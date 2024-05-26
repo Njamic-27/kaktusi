@@ -6,6 +6,7 @@
   import { redirect } from "@/utils/router/routing";
   import OptionButton from "../common/OptionButton.svelte";
   import MessageCard from "../common/MessageCard.svelte";
+  import { authStore } from "@/stores";
 
   export let spot;
 
@@ -17,6 +18,7 @@
   let displayAdminActions = false;
   let displayTotalPrice = false;
   let message;
+  let userId = authStore.getUserId()
 
   let selected = [false, false, false];
 
@@ -92,16 +94,15 @@
   async function handleReservation() {
     displayCard = false;
     // let reservationTime = new Date(Date.now() + selectedHour * 60 * 60 * 1000);
-    let reservationTime = new Date(Date.now() + selectedHour * 60 * 1000);
-    console.log(reservationTime);
+    console.log(selectedHour);
     let parkingSpotId = spot.id;
 
-    //let response = await reservationApi.makeReservation(reservationTime, parkingSpotId);
+    let response = await reservationApi.makeReservation(selectedHour, parkingSpotId, userId);
 
     //provjera sa balance, ima li dovoljno
     //konkurentnost na backendu, što ako dvojica rezerviraju u isto vrijeme
 
-    let response = false;
+    // let response = false;
     if (response) {
       displayCard = false;
       message = "Successful reservation";
