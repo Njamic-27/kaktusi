@@ -55,7 +55,7 @@ public class ParkingSpotService {
             parkingSpot.setOccupied(occupied);
             parkingSpotRepository.save(parkingSpot); // Update the parking spot occupancy status
         }
-
+        System.out.println(parkingSpots);
         return parkingSpots;
     }
 

@@ -1,5 +1,6 @@
 package com.example.kaktusi.controller;
 
+import com.azure.core.annotation.BodyParam;
 import com.example.kaktusi.entity.ParkingSpotReservation;
 import com.example.kaktusi.repository.ReservationRepository;
 import com.example.kaktusi.service.ReservationService;
@@ -32,5 +33,9 @@ public class ReservationController {
     @GetMapping("/api/reservations/user/{userId}")
     public List<ParkingSpotReservation> getCurrentReservations(@PathVariable Long userId) {
         return reservationService.getCurrentReservations(userId);
+    }
+    @PutMapping("/api/reservations/update/{reservationId")
+    public ParkingSpotReservation extendReservation(@PathVariable Long reservationId, @RequestBody Map<String, String> body) {
+        return reservationService.extendReservation(reservationId, Integer.parseInt(body.get("time")));
     }
 }

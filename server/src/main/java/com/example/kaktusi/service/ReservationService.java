@@ -59,4 +59,10 @@ public class ReservationService {
         LocalDateTime now = LocalDateTime.now();
         return reservationRepository.findByUserIdAndEndTimeAfter(userId, now);
     }
+
+    public ParkingSpotReservation extendReservation(Long registrationId, int time) {
+        ParkingSpotReservation reservation = reservationRepository.findByResId(registrationId);
+        reservation.setEndTime(reservation.getEndTime().plusHours(time));
+        return reservationRepository.save(reservation);
+    }
 }
