@@ -1,34 +1,60 @@
 package com.example.kaktusi.service;
 
 import com.example.kaktusi.entity.ParkingSpotDto;
+import com.example.kaktusi.entity.ParkingSpotReservation;
 import com.example.kaktusi.entity.ParkingSpotType;
 import com.example.kaktusi.entity.ParkingSpotZone;
 import com.example.kaktusi.repository.ParkingSpotRepository;
-import jakarta.persistence.GeneratedValue;
+import com.example.kaktusi.repository.ReservationRepository;
 import org.springframework.http.*;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class ParkingSpotService {
     private final String apiUrl = "https://hackathon.kojikukac.com/api/ParkingSpot/getAll";
     private final String apiKey = "f45e6be1-863f-4964-bdd4-bbdd6480ed21";
     private final ParkingSpotRepository parkingSpotRepository;
+    private final ReservationRepository reservationRepository;
 
-    public ParkingSpotService(ParkingSpotRepository parkingSpotRepository) {
+    public ParkingSpotService(ParkingSpotRepository parkingSpotRepository, ReservationRepository reservationRepository) {
         this.parkingSpotRepository = parkingSpotRepository;
+        this.reservationRepository = reservationRepository;
     }
 
-    public List<ParkingSpotDto> getAllParkingSpotsDatabase() {
+    public List<ParkingSpotDto> getAllParkingSpotsDatabase2() {
         return parkingSpotRepository.findAll();
     }
+    public List<ParkingSpotDto> getAllParkingSpotsDatabase() {
+        List<ParkingSpotDto> parkingSpots = parkingSpotRepository.findAll();
+        LocalDateTime now = LocalDateTime.now();
+
+        for (ParkingSpotDto parkingSpot : parkingSpots) {
+            List<ParkingSpotReservation> reservations = reservationRepository.findAllByParkingSpotId(parkingSpot.getId());
+            boolean occupied = false;
+
+            for (ParkingSpotReservation reservation : reservations) {
+                if (reservation.getEndTime().isAfter(now)) {
+                    occupied = true;
+                    break;
+                }
+            }
+
+            parkingSpot.setOccupied(occupied);
+            parkingSpotRepository.save(parkingSpot); // Update the parking spot occupancy status
+        }
+
+        return parkingSpots;
+    }
+
+
     public List<ParkingSpotDto> getAllParkingSpots() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("accept", MediaType.APPLICATION_JSON_VALUE);

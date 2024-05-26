@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<ParkingSpotReservation, String> {
     List<ParkingSpotReservation> findByUserIdAndEndTimeAfter(Long userId, LocalDateTime currentTime);
-
+    List<ParkingSpotReservation> findAllByParkingSpotId(String id);
 
 }

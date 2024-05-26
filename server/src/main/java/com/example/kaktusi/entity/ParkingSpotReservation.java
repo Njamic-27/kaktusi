@@ -17,8 +17,8 @@ public class ParkingSpotReservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long resId;
 
-    @Column
-    private String id;
+    @Column(name = "id")
+    private String parkingSpotId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

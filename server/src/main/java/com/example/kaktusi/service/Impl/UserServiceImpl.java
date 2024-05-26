@@ -1,18 +1,21 @@
 package com.example.kaktusi.service.Impl;
 
+import com.example.kaktusi.entity.Balance;
 import com.example.kaktusi.entity.User;
 import com.example.kaktusi.entity.UserRole;
+import com.example.kaktusi.repository.BalanceRepository;
 import com.example.kaktusi.repository.UserRepository;
 import com.example.kaktusi.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final BalanceRepository balanceRepository;
 
-
-    public UserServiceImpl(UserRepository usersRepository) {
+    public UserServiceImpl(UserRepository usersRepository, BalanceRepository balanceRepository) {
         this.userRepository = usersRepository;
+        this.balanceRepository = balanceRepository;
     }
 
     @Override
@@ -25,9 +28,13 @@ public class UserServiceImpl implements UserService {
                 return null;
             }
             User usersModel = new User();
+            Balance balance = new Balance();
             usersModel.setUsername(username);
             usersModel.setPassword(password);
             usersModel.setRole(UserRole.USER);
+            balance.setUser(usersModel);
+            balance.setBalance(0);
+            balanceRepository.save(balance);
             return userRepository.save(usersModel);
         }
     }
@@ -36,5 +43,4 @@ public class UserServiceImpl implements UserService {
     public User loginUser(String username, String password) {
         return userRepository.findByUsernameAndPassword(username, password).orElse(null);
     }
-
 }
