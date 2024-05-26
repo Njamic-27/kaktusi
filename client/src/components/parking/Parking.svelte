@@ -6,11 +6,13 @@
   import { parkingApi } from "@/api";
   import { onMount } from "svelte";
   import { add } from "ol/coordinate";
+  import ParkingLots from "../parkingLots/ParkingLots.svelte";
   $: selectedSpot = null;
   let spots = [];
   let loaded = false;
   let selected = [];
   let showCategorySection = false;
+  let showParkingLotsSection = false;
   let mapState = null;
   $: spotsForDisplay = [];
 
@@ -68,6 +70,10 @@
     showCategorySection = !showCategorySection;
   }
 
+  function toggleParkingLotsContainerVisibility() {
+    showParkingLotsSection = !showParkingLotsSection;
+  }
+
   function saveState(e) {
     mapState = e.detail;
   }
@@ -113,9 +119,15 @@
         bind:selected
       />
     {/if}
+    {#if showParkingLotsSection}
+      <ParkingLots parkingLots={[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}></ParkingLots>
+    {/if}
     <button class="button" on:click={refreshData}>Refresh</button>
     <button class="filter" on:click={toggleFilterContainerVisibility}
       >Filter</button
+    >
+    <button class="parkingLots" on:click={toggleParkingLotsContainerVisibility}
+      >Parking Lots</button
     >
     <ParkingMap
       spots={spotsForDisplay}
@@ -165,7 +177,22 @@
     left: 5px;
     z-index: 2;
     width: 100px;
+    border: 3px solid var(--color-accent);
+    padding: 5px;
+    border-radius: 15px;
+    margin: 5px;
+    font-family: "Poppins";
+    font-size: large;
+    background-color: var(--color-primary);
+    color: white;
+  }
 
+  .parkingLots {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    z-index: 2;
+    width: 100px;
     border: 3px solid var(--color-accent);
     padding: 5px;
     border-radius: 15px;
