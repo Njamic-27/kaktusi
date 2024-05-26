@@ -19,7 +19,7 @@ public class BalanceController {
         return balanceService.getBalanceByUserId(userId);
     }
 
-    @PostMapping("/{userId}/add")
+    @PutMapping("/{userId}/add")
     public int addMoneyToBalance(@PathVariable Long userId, @RequestParam Integer amount) {
         return balanceService.addMoneyToBalance(userId, amount);
     }

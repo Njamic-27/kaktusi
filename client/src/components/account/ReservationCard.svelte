@@ -2,7 +2,8 @@
   import { slide } from "svelte/transition";
   import OptionButton from "../common/OptionButton.svelte";
   import ButtonPrimary from "../common/ButtonPrimary.svelte";
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
+  import { parkingApi } from "@/api";
 
   export let reservation;
 
@@ -21,8 +22,12 @@
   let infoText = "Expires in";
   let infoTime = "20min";
   let selected = [false, false, false];
-
+  let price;
   let showExtraOptions = false;
+
+  onMount(async () => {
+    price = await parkingApi.fetchPrice(reservation.parkingSpotId);
+  });
 
   function toggleExtraOptions() {
     showExtraOptions = !showExtraOptions;
@@ -40,7 +45,7 @@
     selected[value - 1] = true;
   }
 
-  function handleReservationExtension() {
+  async function handleReservationExtension() {
     dispatch("reservationExtension", { reservation, selectedHour });
   }
 </script>
@@ -85,7 +90,7 @@
         {#if selectedHour != null}
           <div class="extendButtonContainer" in:slide>
             <hr class="divider" />
-            <div class="price">Total price: 2.6 €</div>
+            <div class="price">Total price: {(price * selectedHour).toFixed(2)}€</div>
             <ButtonPrimary text={"Extend"} on:click={handleReservationExtension}
             ></ButtonPrimary>
           </div>

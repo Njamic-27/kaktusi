@@ -6,8 +6,8 @@ const urls = {
   fetchBalance(id) {
     return `${this.root}/${id}`;
   },
-  updateBalance(id) {
-    return `${this.root}/update/${id}`;
+  updateBalance(id, balance) {
+    return `${this.root}/${id}/add?amount=${balance}`;
   },
 };
 
@@ -17,9 +17,7 @@ const fetchBalance = async (id) => {
 };
 
 const updateBalance = async (id, balance) => {
-  const result = await request
-    .put(urls.updateBalance(id), { balance })
-    .then(extractData);
+  const result = await request.put(urls.updateBalance(id, balance)).then(extractData);
   return result;
 };
 
