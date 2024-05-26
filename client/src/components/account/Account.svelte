@@ -6,8 +6,9 @@
   import MessageCard from "../common/MessageCard.svelte";
   import { getUserId, user } from "@/stores/auth";
   import { accountApi, reservationApi } from "@/api";
+  import { fade, scale } from "svelte/transition";
 
-  let loaded = true;
+  let loaded = false;
   let balance; //dohvati
   let userId = getUserId();
   let reservations = [];
@@ -15,18 +16,18 @@
   let message;
 
   onMount(async () => {
-    balance = await accountApi.fetchBalance(userId)
-    reservations = await reservationApi.fetchUserReservations(userId)
+    balance = await accountApi.fetchBalance(userId);
+    reservations = await reservationApi.fetchUserReservations(userId);
+    loaded = true;
   });
 
   async function addBalance({ detail: newBalance }) {
     loaded = false;
     balance = balance + newBalance;
     try {
-      //let res = await accountApi.updateBalance(userId, balance);
-      let res = true;
+      let res = await accountApi.updateBalance(userId, newBalance);
       if (res) {
-        redirect("Account");
+        balance = await accountApi.fetchBalance(userId);
       } else {
         console.error("Error: Unable to update balance");
       }
@@ -69,9 +70,9 @@
   <MessageCard {message}></MessageCard>
 {/if}
 
-<main>
+<main in:scale out:scale>
   {#if !loaded}
-    <div class="loading">Loading</div>
+    <div class="loading"></div>
   {:else}
     <Wallet {balance} on:addBalance={addBalance}></Wallet>
     <Reservations

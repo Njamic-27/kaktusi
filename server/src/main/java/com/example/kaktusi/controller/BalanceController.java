@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/balance")
+@RequestMapping("/api/balance")
 @CrossOrigin(origins = "http://localhost:3000")
 public class BalanceController {
 
@@ -18,7 +18,7 @@ public class BalanceController {
         return balanceService.getBalanceByUserId(userId);
     }
 
-    @PostMapping("/{userId}/add")
+    @PutMapping("/{userId}/add")
     public int addMoneyToBalance(@PathVariable Long userId, @RequestParam Integer amount) {
         return balanceService.addMoneyToBalance(userId, amount);
     }
