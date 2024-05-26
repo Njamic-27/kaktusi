@@ -146,55 +146,59 @@
   {#if displayCard === true}
     <div class="cardContainer" in:slide={{ delay: 200 }} out:slide>
       <div class="spot-title">{address}</div>
-      <p class="parking-type">Parking type: {spot.parkingSpotType}</p>
-      {#if !spot.occupied}
-        <div class="time-container">
-          <span class="time-label">Reserve for:</span>
-          <div class="timeSelectGrid">
-            <div class="option">
-              <OptionButton
-                value="1"
-                selected={selected[0]}
-                on:hourSelection={handleHourSelection}
-              ></OptionButton>
-            </div>
-            <div class="option">
-              <OptionButton
-                value="2"
-                selected={selected[1]}
-                on:hourSelection={handleHourSelection}
-              ></OptionButton>
-            </div>
-            <div class="option">
-              <OptionButton
-                value="3"
-                selected={selected[2]}
-                on:hourSelection={handleHourSelection}
-              ></OptionButton>
+      {#if !displayAdminActions}
+        <p class="parking-type">Parking type: {spot.parkingSpotType}</p>
+        {#if !spot.occupied}
+          <div class="time-container">
+            <span class="time-label">Reserve for:</span>
+            <div class="timeSelectGrid">
+              <div class="option">
+                <OptionButton
+                  value="1"
+                  selected={selected[0]}
+                  on:hourSelection={handleHourSelection}
+                ></OptionButton>
+              </div>
+              <div class="option">
+                <OptionButton
+                  value="2"
+                  selected={selected[1]}
+                  on:hourSelection={handleHourSelection}
+                ></OptionButton>
+              </div>
+              <div class="option">
+                <OptionButton
+                  value="3"
+                  selected={selected[2]}
+                  on:hourSelection={handleHourSelection}
+                ></OptionButton>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="price-container">
-          <span class="price-label"
-            >Price per hour in Zone {spot.parkingSpotZone.slice(-1)}:</span
+          <div class="price-container">
+            <span class="price-label"
+              >Price per hour in Zone {spot.parkingSpotZone.slice(-1)}:</span
+            >
+            <span class="highlighted-price">{price}€</span>
+          </div>
+          {#if displayTotalPrice}
+            <div class="price-container" in:scale>
+              <span class="price-label">Total price:</span>
+              <span class="highlighted-price">{totalPrice}€</span>
+            </div>
+          {/if}
+
+          <button class="button" on:click={handleReservation}
+            >Reserve Now</button
           >
-          <span class="highlighted-price">{price}€</span>
-        </div>
-        {#if displayTotalPrice}
-          <div class="price-container" in:scale>
-            <span class="price-label">Total price:</span>
-            <span class="highlighted-price">{totalPrice}€</span>
+
+          <button class="button" on:click={navigate}>Navigate</button>
+        {:else}
+          <div class="takenSpotContainer">
+            <div class="message">This spot is occupied for next:</div>
+            <div class="timeOccupied">26 min</div>
           </div>
         {/if}
-
-        <button class="button" on:click={handleReservation}>Reserve Now</button>
-
-        <button class="button" on:click={navigate}>Navigate</button>
-      {:else}
-        <div class="takenSpotContainer">
-          <div class="message">This spot is occupied for next:</div>
-          <div class="timeOccupied">26 min</div>
-        </div>
       {/if}
       {#if displayAdminActions}
         <label for="zone">Parking Zone:</label>
@@ -316,7 +320,7 @@
     border: 3px solid var(--color-primary);
     border-radius: 10px;
     color: white;
-    background-color: var(--color-accent);
+    background-color: var(--color-primary);
     margin-bottom: 5px;
   }
 

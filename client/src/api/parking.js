@@ -31,9 +31,9 @@ const fetchAll = async () => {
   return result;
 };
 
-const insert = async (longitude, latitude, zone) => {
+const insert = async (longitude, latitude, zone, type) => {
   const result = await request
-    .get(urls.insert, { longitude, latitude, zone })
+    .get(urls.insert, { longitude, latitude, zone, type })
     .then(extractData);
   return result;
 };
