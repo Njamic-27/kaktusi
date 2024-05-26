@@ -15,12 +15,10 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000")
 public class ReservationController {
     private final ReservationService reservationService;
-    private final ReservationRepository reservationRepository;
 
-    public ReservationController(ReservationService reservationService,
-                                 ReservationRepository reservationRepository) {
+
+    public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
-        this.reservationRepository = reservationRepository;
     }
 
     @PostMapping("/api/reservations/make")
@@ -31,7 +29,7 @@ public class ReservationController {
 
         return reservationService.reserveParkingSpot(parkingSpotId, time, userId);
     }
-    @GetMapping("/api/parking/reservations/{userId}")
+    @GetMapping("/api/reservations/user/{userId}")
     public List<ParkingSpotReservation> getCurrentReservations(@PathVariable Long userId) {
         return reservationService.getCurrentReservations(userId);
     }

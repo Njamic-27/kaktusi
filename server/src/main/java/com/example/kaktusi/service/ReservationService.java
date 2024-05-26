@@ -36,7 +36,8 @@ public class ReservationService {
                 if (optionalUser.isPresent()) {
                     User user = optionalUser.get();
                     parkingSpotReservation.setUser(user);
-                    parkingSpotRepository.occupySpot(parkingSpot.getId());
+                    parkingSpotReservation.setParkingSpotId(parkingSpotId);
+                    parkingSpotRepository.occupySpot(parkingSpotId);
                     reservationRepository.save(parkingSpotReservation);
                 }
 
