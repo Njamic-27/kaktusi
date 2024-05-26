@@ -1,5 +1,6 @@
 <script>
   import { parkingApi } from "@/api";
+  import { redirect } from "@/utils/router/routing";
 
   let longitude = "";
   let latitude = "";
@@ -7,15 +8,19 @@
   let parkingSpotType = "normal";
 
   const parkingZones = ["1", "2", "3", "4"];
-  const parkingTypes = ["normal", "electric", "handicap"];
+  const parkingTypes = ["NORMAL", "ELECTRIC", "HANDICAP"];
 
   async function handleSubmit() {
+    event.preventDefault(); // Prevent the default form submission behavior
+
     await parkingApi.insert(
       longitude,
       latitude,
       parkingSpotZone - 1,
       parkingSpotType
     );
+
+    redirect("Parking");
   }
 </script>
 

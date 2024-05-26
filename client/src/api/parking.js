@@ -16,7 +16,7 @@ const urls = {
     return `${this.root}/delete/${id}`;
   },
   get insert() {
-    return this.root + "/insert";
+    return this.root + "/add";
   },
 };
 
@@ -25,9 +25,9 @@ const fetchAll = async () => {
   return result;
 };
 
-const insert = async (longitude, latitude, zone, type) => {
+const insert = async (longitude, latitude, zone, parkingSpotType) => {
   const result = await request
-    .get(urls.insert, { longitude, latitude, zone, type })
+    .post(urls.insert, { longitude, latitude, zone, parkingSpotType })
     .then(extractData);
   return result;
 };
@@ -37,28 +37,21 @@ const fetchPrice = (id) => {
   return result;
 };
 
-const makeReservation = async (endH, parkingSpotId) => {
-  const result = await request.post(urls.makeReservation, {
-    endH,
-    parkingSpotId,
-  });
-
-  return extractData(result);
-};
-
-const update = (id, zone, type) => {
-  const result = request.put(urls.update(id), { zone, type }).then(extractData);
+const update = async (id, zone, type) => {
+  const result = await request
+    .put(urls.update(id), { zone, type })
+    .then(extractData);
   return result;
 };
-const deleteSpot = (id) => {
-  const result = request.delete(urls.deleteSpot(id)).then(extractData);
+const deleteSpot = async (id) => {
+  console.log("deleting");
+  const result = await request.delete(urls.deleteSpot(id));
   return result;
 };
 
 export default {
   fetchAll,
   fetchPrice,
-  makeReservation,
   update,
   deleteSpot,
   insert,

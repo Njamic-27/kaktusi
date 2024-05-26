@@ -33,8 +33,9 @@
   let selectedHour;
 
   let dispatch = createEventDispatcher();
-  let selectedZone = spot.parkingSpotZone;
-  let selectedType = spot.parkingSpotType;
+  let selectedZone;
+  let selectedType;
+
 
   let lat = spot.latitude;
   let lng = spot.longitude;
@@ -45,6 +46,8 @@
 
     const id = spot.id;
     price = spot.parkingSpotZone.price;
+    selectedZone = spot.parkingSpotZone.id + 1;
+    selectedType = spot.parkingSpotType;
 
     fetch(nominatimUrl)
       .then((response) => response.json())
@@ -87,9 +90,11 @@
   };
 
   const deleteSpot = async () => {
-    let res = parkingApi.deleteSpot(spot.id);
+    let res = await parkingApi.deleteSpot(spot.id);
     if (res) dispatchRefresh();
   };
+
+  console.log(spot);
 
   async function handleReservation() {
     displayCard = false;
@@ -195,14 +200,14 @@
         {/if}
       {/if}
       {#if displayAdminActions}
-        <label for="zone">Parking Zone:</label>
+        <label for="zone">Parking Zone: {selectedZone}</label>
         <select
           id="zone"
           bind:value={selectedZone}
           on:change={handleZoneChange}
         >
           {#each zoneOptions as zone (zone)}
-            <option value={zone}>Zone {zone}</option>
+            <option value={zone}>{zone}</option>
           {/each}
         </select>
 

@@ -4,7 +4,6 @@
   import SelectedParking from "./SelectedParking.svelte";
   import { parkingApi } from "@/api";
   import { onMount } from "svelte";
-  import ParkingLots from "../parkingLots/ParkingLots.svelte";
 
   let loaded = false;
   let showCategorySection = false;
@@ -118,16 +117,12 @@
         bind:selected
       />
     {/if}
-    {#if showParkingLotsSection}
-      <ParkingLots parkingLots={[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}></ParkingLots>
-    {/if}
+    
     <button class="button" on:click={refreshData}>Refresh</button>
     <button class="filter" on:click={toggleFilterContainerVisibility}
       >Filter</button
     >
-    <button class="parkingLots" on:click={toggleParkingLotsContainerVisibility}
-      >Parking Lots</button
-    >
+   
     <ParkingMap
       spots={spotsForDisplay}
       currentState={mapState}

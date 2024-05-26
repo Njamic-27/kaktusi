@@ -32,9 +32,9 @@ const fetchUserReservations = async (id) => {
   return result;
 };
 
-const extendReservation = async (resId, time) => {
+const extendReservation = async (resId, time, parkingSpotId) => {
   const result = await request
-    .put(urls.extendReservation(resId), { time })
+    .put(urls.extendReservation(resId), { time, parkingSpotId })
     .then(extractData);
   return result;
 };

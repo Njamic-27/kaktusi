@@ -9,7 +9,7 @@
   import { fade, scale } from "svelte/transition";
 
   let loaded = false;
-  let balance; //dohvati
+  let balance;
   let userId = getUserId();
   let reservations = [];
   let displayMessage = false;
@@ -17,17 +17,17 @@
 
   onMount(async () => {
     balance = await accountApi.fetchBalance(userId);
+    balance = balance.toFixed(2);
     reservations = await reservationApi.fetchUserReservations(userId);
     loaded = true;
   });
 
   async function addBalance({ detail: newBalance }) {
     loaded = false;
-    balance = balance + newBalance;
     try {
       let res = await accountApi.updateBalance(userId, newBalance);
       if (res) {
-        balance = await accountApi.fetchBalance(userId);
+        redirect("Account");
       } else {
         console.error("Error: Unable to update balance");
       }
@@ -41,11 +41,13 @@
   async function handleReservationExtension({
     detail: { reservation, selectedHour },
   }) {
+    console.log(reservation);
     loaded = false;
     try {
       let res = await reservationApi.extendReservation(
         reservation.resId,
-        selectedHour
+        selectedHour,
+        reservation.parkingSpotId
       );
       if (res) {
         message = "Extended reservation successfully";
@@ -55,7 +57,11 @@
           redirect("Account");
         }, 2000);
       } else {
-        console.error("Error: Unable to extend reservation");
+        message = "Unable to extend reservation, check your balance!";
+        displayMessage = true;
+        setTimeout(() => {
+          displayMessage = false;
+        }, 2000);
       }
     } catch (error) {
       console.error("Error: ", error);
@@ -69,7 +75,7 @@
   <MessageCard {message}></MessageCard>
 {/if}
 
-<main in:scale out:scale>
+<main in:fade out:fade>
   {#if !loaded}
     <div class="loading"></div>
   {:else}

@@ -25,7 +25,6 @@ const register = (username, password) => {
   const result = request
     .post(urls.register, { username, password })
     .then(extractData);
-  console.log(result);
   return result;
 };
 

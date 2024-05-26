@@ -20,6 +20,7 @@
     height: 100px;
     background-color: var(--color-primary);
     border-radius: 15px;
+    border: 3px solid white;
     padding: 5vw;
     color: white;
     z-index: 999;

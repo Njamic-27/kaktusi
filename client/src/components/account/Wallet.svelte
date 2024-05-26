@@ -47,7 +47,7 @@
     align-items: center;
     width: 70%;
     height: 10vh;
-    font-size: 4rem;
+    font-size: 3rem;
     font-weight: 800;
   }
 
