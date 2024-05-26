@@ -37,7 +37,10 @@ public class ParkingSpotService {
         LocalDateTime now = LocalDateTime.now();
 
         for (ParkingSpotDto parkingSpot : parkingSpots) {
-            List<ParkingSpotReservation> reservations = reservationRepository.findAllByParkingSpotId(parkingSpot.getId());
+            List<ParkingSpotReservation> reservations = reservationRepository.findAllByParkingSpotId(parkingSpot.getId())
+                    .stream().filter(reservation -> reservation.getEndTime() != null)
+                    .toList();
+
             boolean occupied = false;
 
             for (ParkingSpotReservation reservation : reservations) {
