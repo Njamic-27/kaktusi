@@ -28,7 +28,6 @@
     if (selectedSpot) {
       selectedSpot = null;
     }
-    console.log(data);
     selectedSpot = data;
   }
 

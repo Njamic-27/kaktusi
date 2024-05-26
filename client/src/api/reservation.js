@@ -15,7 +15,6 @@ const urls = {
 };
 
 const makeReservation = async (time, parkingSpotId, userId) => {
-  console.log(time, parkingSpotId, userId);
   const result = await request.post(urls.makeReservation, {
     time,
     parkingSpotId,
@@ -35,7 +34,7 @@ const fetchUserReservations = async (id) => {
 
 const extendReservation = async (resId, time) => {
   const result = await request
-    .put(urls.extendReservation, { time })
+    .put(urls.extendReservation(resId), { time })
     .then(extractData);
   return result;
 };

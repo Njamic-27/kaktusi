@@ -1,5 +1,5 @@
 <script>
-  import { fade, scale, slide } from "svelte/transition";
+  import { fade, fly, scale, slide } from "svelte/transition";
   import { createEventDispatcher, onMount } from "svelte";
   import { parkingApi, reservationApi } from "@/api";
   import { isAdmin } from "@/stores/auth";
@@ -44,7 +44,7 @@
     const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
 
     const id = spot.id;
-    price = spot.parkingSpotZone.price
+    price = spot.parkingSpotZone.price;
 
     fetch(nominatimUrl)
       .then((response) => response.json())
@@ -82,7 +82,6 @@
   }
 
   const saveChangesAdmin = async () => {
-    console.log(selectedZone - 1);
     await parkingApi.update(spot.id, selectedZone - 1, selectedType);
     dispatchRefresh();
   };
@@ -94,8 +93,6 @@
 
   async function handleReservation() {
     displayCard = false;
-    // let reservationTime = new Date(Date.now() + selectedHour * 60 * 60 * 1000);
-    console.log(selectedHour);
     let parkingSpotId = spot.id;
 
     let response = await reservationApi.makeReservation(
@@ -104,10 +101,6 @@
       userId
     );
 
-    //provjera sa balance, ima li dovoljno
-    //konkurentnost na backendu, što ako dvojica rezerviraju u isto vrijeme
-
-    // let response = false;
     if (response) {
       displayCard = false;
       message = "Successful reservation";
@@ -186,20 +179,18 @@
           </div>
           {#if displayTotalPrice}
             <div class="price-container" in:scale>
-              <span class="price-label">Total price:</span>
-              <span class="highlighted-price">{totalPrice}€</span>
+              <span class="price-label" in:fly>Total price:</span>
+              <span class="highlighted-price" in:fly>{totalPrice}€</span>
             </div>
+            <button class="button" on:click={handleReservation} in:fly
+              >Reserve Now</button
+            >
           {/if}
-
-          <button class="button" on:click={handleReservation}
-            >Reserve Now</button
-          >
 
           <button class="button" on:click={navigate}>Navigate</button>
         {:else}
           <div class="takenSpotContainer">
-            <div class="message">This spot is occupied for next:</div>
-            <div class="timeOccupied">26 min</div>
+            <div class="message">This spot is occupied</div>
           </div>
         {/if}
       {/if}
@@ -253,15 +244,6 @@
     justify-content: center;
     align-items: center;
     font-size: 1.3rem;
-  }
-
-  .timeOccupied {
-    height: 40%;
-    font-size: 3rem;
-    font-weight: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   .option {
