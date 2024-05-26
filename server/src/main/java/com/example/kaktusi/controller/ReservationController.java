@@ -36,6 +36,7 @@ public class ReservationController {
     }
     @PutMapping("/api/reservations/update/{reservationId}")
     public ParkingSpotReservation extendReservation(@PathVariable Long reservationId, @RequestBody Map<String, String> body) {
+        System.out.println("haha");
         return reservationService.extendReservation(reservationId, Integer.parseInt(body.get("time")));
     }
 }

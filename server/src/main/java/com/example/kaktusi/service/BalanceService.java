@@ -11,11 +11,11 @@ public class BalanceService {
     @Autowired
     private BalanceRepository balanceRepository;
 
-    public int getBalanceByUserId(Long userId) {
+    public double getBalanceByUserId(Long userId) {
         return balanceRepository.findByUserId(userId).getBalance();
     }
 
-    public int addMoneyToBalance(Long userId, Integer amount) {
+    public double addMoneyToBalance(Long userId, Integer amount) {
         Balance balance = balanceRepository.findByUserId(userId);
         if (balance != null) {
             balance.setBalance(balance.getBalance() + amount);

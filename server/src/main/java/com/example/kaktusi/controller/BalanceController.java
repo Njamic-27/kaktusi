@@ -14,13 +14,13 @@ public class BalanceController {
     private BalanceService balanceService;
 
     @GetMapping("/{userId}")
-    public int getBalance(@PathVariable Long userId) {
+    public double getBalance(@PathVariable Long userId) {
         System.out.println("tu sam");
         return balanceService.getBalanceByUserId(userId);
     }
 
     @PutMapping("/{userId}/add")
-    public int addMoneyToBalance(@PathVariable Long userId, @RequestParam Integer amount) {
+    public double addMoneyToBalance(@PathVariable Long userId, @RequestParam Integer amount) {
         return balanceService.addMoneyToBalance(userId, amount);
     }
 }
