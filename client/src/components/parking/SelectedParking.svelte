@@ -91,7 +91,8 @@
 
   async function handleReservation() {
     displayCard = false;
-    let reservationTime = new Date(Date.now() + selectedHour * 60 * 60 * 1000);
+    // let reservationTime = new Date(Date.now() + selectedHour * 60 * 60 * 1000);
+    let reservationTime = new Date(Date.now() + selectedHour * 60 * 1000);
     console.log(reservationTime);
     let parkingSpotId = spot.id;
 
@@ -121,10 +122,6 @@
   const dispatchRefresh = async () => {
     dispatch("refresh");
   };
-
-  /* const getStats = async () => {
-    const res = await parkingApi.fetchStats(spot.id);
-  }; */
 
   function handleHourSelection({ detail: hour }) {
     selectedHour = hour;
@@ -223,9 +220,6 @@
           {/each}
         </select>
         <button class="button" on:click={saveChangesAdmin}>Save changes</button>
-        <!-- <button class="button" on:click={getStats}
-          ><i class="fa-solid fa-chart-simple" /></button
-        > -->
         <button class="button" on:click={deleteSpot}>Delete parking spot</button
         >
       {/if}

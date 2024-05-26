@@ -9,17 +9,11 @@ const urls = {
   fetchPrice(id) {
     return `${this.root}/price/${id}`;
   },
-  fetchStats(id) {
-    return `${this.root}/analytic/${id}`;
-  },
   update(id) {
     return `${this.root}/update/${id}`;
   },
   deleteSpot(id) {
     return `${this.root}/delete/${id}`;
-  },
-  get makeReservation() {
-    return this.root + "/makeReservation";
   },
   get insert() {
     return this.root + "/insert";
@@ -40,11 +34,6 @@ const insert = async (longitude, latitude, zone, type) => {
 
 const fetchPrice = (id) => {
   const result = request.get(urls.fetchPrice(id)).then(extractData);
-  return result;
-};
-
-const fetchStats = (id) => {
-  const result = request.get(urls.fetchStats(id)).then(extractData);
   return result;
 };
 
@@ -72,6 +61,5 @@ export default {
   makeReservation,
   update,
   deleteSpot,
-  fetchStats,
   insert,
 };

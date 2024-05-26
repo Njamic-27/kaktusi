@@ -12,7 +12,6 @@
     zoomLevel: 13,
   };
 
-  // Define marker icons with different colors
   const redIcon = L.icon({
     iconUrl: "./src/public/markers/red_marker.png",
     iconSize: [30, 41],

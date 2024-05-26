@@ -1,20 +1,20 @@
 <script>
-  import { map } from "leaflet";
   import Filter from "../common/Filter.svelte";
   import ParkingMap from "./ParkingMap.svelte";
   import SelectedParking from "./SelectedParking.svelte";
   import { parkingApi } from "@/api";
   import { onMount } from "svelte";
-  import { add } from "ol/coordinate";
   import ParkingLots from "../parkingLots/ParkingLots.svelte";
-  $: selectedSpot = null;
-  let spots = [];
+
   let loaded = false;
-  let selected = [];
   let showCategorySection = false;
   let showParkingLotsSection = false;
   let mapState = null;
+  let selected = [];
+  let spots = [];
+
   $: spotsForDisplay = [];
+  $: selectedSpot = null;
 
   onMount(async () => {
     spots = await parkingApi.fetchAll();
@@ -105,7 +105,6 @@
         console.error("Error:", error);
       });
   }
-  // Replace 'YOUR_ADDRESS' with the address you want to geocode
 </script>
 
 <main>
