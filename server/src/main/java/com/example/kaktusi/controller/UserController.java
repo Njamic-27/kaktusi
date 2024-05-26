@@ -26,18 +26,15 @@ public class UserController {
         String username = requestBody.get("username");
         String password = requestBody.get("password");
         System.out.println("register request: " + username + " " + password);
-        User registeredUser =  userService.registerUser(username, password);
-        return registeredUser == null ? null : registeredUser;
+        return userService.registerUser(username, password);
     }
 
     @PostMapping("/login")
     public User login(@RequestBody Map<String, String> requestBody) {
         String username = requestBody.get("username");
         String password = requestBody.get("password");
-
         System.out.println("login request: " + username + " " + password);
-        User loggedUser = userService.loginUser(username, password);
-        return loggedUser == null ? null : loggedUser;
+        return userService.loginUser(username, password);
     }
 
 }
