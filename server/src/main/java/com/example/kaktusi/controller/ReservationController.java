@@ -34,7 +34,7 @@ public class ReservationController {
     public List<ParkingSpotReservation> getCurrentReservations(@PathVariable Long userId) {
         return reservationService.getCurrentReservations(userId);
     }
-    @PutMapping("/api/reservations/update/{reservationId")
+    @PutMapping("/api/reservations/update/{reservationId}")
     public ParkingSpotReservation extendReservation(@PathVariable Long reservationId, @RequestBody Map<String, String> body) {
         return reservationService.extendReservation(reservationId, Integer.parseInt(body.get("time")));
     }
